@@ -74,10 +74,10 @@ export default function AdminSidebar({ currentPath = "/Admin/dashboard" }: Admin
       ],
     },
     {
-      group: "MONITORING KAMPUS",
+      group: "PENGELOLAAN AKADEMIK",
       items: [
         {
-          label: "Monitoring Seluruh Kelas",
+          label: "Manajemen Data Kelas",
           href: "/Admin/kelas",
           icon: Layers,
         },

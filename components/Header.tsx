@@ -54,7 +54,7 @@ export default function Header({
             href="/Admin/dashboard"
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[11px] shadow-xs transition"
           >
-            <span>⚙️ Portal Admin</span>
+            <span>Portal Admin</span>
           </a>
         )}
 

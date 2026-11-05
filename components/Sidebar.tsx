@@ -7,16 +7,12 @@ import { useRouter } from "next/navigation";
 import logoImg from "@/public/image/logo.png";
 import {
   LayoutDashboard,
-  Layers,
-  UserPlus,
   FileEdit,
-  FileSpreadsheet,
-  BarChart3,
   Sparkles,
+  BarChart3,
   Printer,
   User,
   ShieldCheck,
-  BookOpen,
   LogOut,
 } from "lucide-react";
 
@@ -57,16 +53,6 @@ export default function Sidebar({ currentPath = "/Dosen/dashboard" }: SidebarPro
           href: "/Dosen/dashboard",
           icon: LayoutDashboard,
         },
-        {
-          label: "Manajemen Data Kelas",
-          href: "/Dosen/manajemenkelas",
-          icon: Layers,
-        },
-        {
-          label: "Tambah Kelas & Mahasiswa",
-          href: "/Dosen/tambahkelas",
-          icon: UserPlus,
-        },
       ],
     },
     {
@@ -78,9 +64,9 @@ export default function Sidebar({ currentPath = "/Dosen/dashboard" }: SidebarPro
           icon: FileEdit,
         },
         {
-          label: "Import Nilai Excel",
+          label: "Import Nilai & Generate AI",
           href: "/Dosen/importnilai",
-          icon: FileSpreadsheet,
+          icon: Sparkles,
         },
       ],
     },
@@ -91,12 +77,6 @@ export default function Sidebar({ currentPath = "/Dosen/dashboard" }: SidebarPro
           label: "Analitik & AI Feedback",
           href: "/Dosen/analitikAI",
           icon: BarChart3,
-        },
-        {
-          label: "Generate AI Feedback",
-          href: "/Dosen/generateAI",
-          icon: Sparkles,
-          badge: "Baru",
         },
         {
           label: "Cetak PDF & Laporan",
@@ -178,11 +158,6 @@ export default function Sidebar({ currentPath = "/Dosen/dashboard" }: SidebarPro
                         />
                         <span>{item.label}</span>
                       </div>
-                      {item.badge && (
-                        <span className="text-[9px] bg-purple-100 text-purple-700 font-bold px-1.5 py-0.5 rounded-full">
-                          {item.badge}
-                        </span>
-                      )}
                     </Link>
                   );
                 })}

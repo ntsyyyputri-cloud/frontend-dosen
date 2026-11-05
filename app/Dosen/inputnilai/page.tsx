@@ -8,7 +8,6 @@ import Header from "@/components/Header";
 import { apiFetch } from "@/lib/api";
 import {
   Search,
-  ArrowUpDown,
   Upload,
   Save,
   Calculator,
@@ -491,13 +490,9 @@ export default function DashboardPage() {
               {classes.length === 0 ? (
                 <div className="py-1">
                   <p className="text-xs text-amber-600 font-medium">Belum ada kelas aktif</p>
-                  <button
-                    type="button"
-                    onClick={() => router.push("/Dosen/tambahkelas")}
-                    className="text-[11px] text-indigo-600 font-semibold underline mt-1 block"
-                  >
-                    + Buat Kelas Baru
-                  </button>
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    Hubungi Admin Akademik untuk penugasan kelas.
+                  </p>
                 </div>
               ) : (
                 <select
@@ -713,14 +708,10 @@ export default function DashboardPage() {
               </div>
 
               <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-600 font-medium">
-
-                <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-
                 <span>
                   Urutkan:{" "}
                   <strong>NIM (Terkecil)</strong>
                 </span>
-
               </div>
 
             </div>
@@ -972,17 +963,7 @@ export default function DashboardPage() {
 
                           <td className="py-3.5 px-4 max-w-xs">
 
-                            <div className="flex items-start gap-1.5 text-[11px]">
-
-                              {item.status ===
-                              "Perlu remedial" ? (
-                                <AlertTriangle className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
-                              ) : item.status ===
-                                "Belum lengkap" ? (
-                                <XCircle className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
-                              ) : (
-                                <Sparkles className="w-3.5 h-3.5 text-purple-600 shrink-0 mt-0.5" />
-                              )}
+                            <div className="text-[11px]">
 
                               <span
                                 className={`line-clamp-2 ${
