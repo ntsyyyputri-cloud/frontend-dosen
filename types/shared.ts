@@ -1,4 +1,4 @@
-import React from "react";
+import { ComponentType } from "react";
 
 export interface BreadcrumbProps {
   breadcrumbs?: string[];
@@ -7,7 +7,7 @@ export interface BreadcrumbProps {
 export interface NavItem {
   label: string;
   href: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
   badge?: string;
 }
 
