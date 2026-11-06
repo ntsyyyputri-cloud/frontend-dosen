@@ -42,8 +42,8 @@ export const createClassAction = authActionClient
     }
 
     // Revalidasi cache halaman Next.js
-    revalidatePath("/Dosen/manajemenkelas");
-    revalidatePath("/Dosen/tambahkelas");
+    revalidatePath("/Admin/kelas");
+    revalidatePath("/Admin/tambahkelas");
 
     return {
       success: true,
