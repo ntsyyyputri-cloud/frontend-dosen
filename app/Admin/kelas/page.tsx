@@ -62,6 +62,13 @@ const PRODI_OPTIONS = [
   "D3 Manajemen Informatika",
 ];
 
+const ACADEMIC_YEAR_OPTIONS = [
+  "2024/2025 Ganjil",
+  "2024/2025 Genap",
+  "2025/2026 Ganjil",
+  "2025/2026 Genap",
+];
+
 export default function AdminKelasPage() {
   const [classes, setClasses] = useState<CampusClassData[]>([]);
   const [lecturers, setLecturers] = useState<LecturerOption[]>([]);
@@ -71,13 +78,16 @@ export default function AdminKelasPage() {
   const [selectedProdi, setSelectedProdi] = useState("Semua Prodi");
   const [selectedSemester, setSelectedSemester] = useState("Semua");
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Notifications
   const [toastMsg, setToastMsg] = useState("");
+  const [toastType, setToastType] = useState<"success" | "error">("success");
   const [showToast, setShowToast] = useState(false);
 
-  const notify = (msg: string) => {
+  const notify = (msg: string, type: "success" | "error" = "success") => {
     setToastMsg(msg);
+    setToastType(type);
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3500);
   };
@@ -104,8 +114,8 @@ export default function AdminKelasPage() {
     semester: 1,
     academic_year: "2024/2025 Ganjil",
     capacity: 40,
-    schedule: "Senin, 08:00 - 10:30 WIB",
-    room: "Lab Komputer 1",
+    schedule: "",
+    room: "",
     lecturer_id: "",
   });
 
@@ -146,8 +156,8 @@ export default function AdminKelasPage() {
       semester: 1,
       academic_year: "2024/2025 Ganjil",
       capacity: 40,
-      schedule: "Senin, 08:00 - 10:30 WIB",
-      room: "Lab Komputer 1",
+      schedule: "",
+      room: "",
       lecturer_id: lecturers[0]?.id ? String(lecturers[0].id) : "",
     });
     setShowCreateModal(true);
@@ -163,8 +173,8 @@ export default function AdminKelasPage() {
       semester: c.semester,
       academic_year: c.academic_year || "2024/2025 Ganjil",
       capacity: c.capacity,
-      schedule: c.schedule,
-      room: c.room,
+      schedule: c.schedule || "",
+      room: c.room || "",
       lecturer_id: String(c.lecturer_id),
     });
     setShowCreateModal(true);
@@ -172,11 +182,12 @@ export default function AdminKelasPage() {
 
   const handleSaveClass = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.code || !formData.title || !formData.lecturer_id) {
-      notify("Mohon lengkapi kode kelas, nama mata kuliah, dan dosen pengampu.");
+    if (!formData.code.trim() || !formData.title.trim() || !formData.lecturer_id) {
+      notify("Mohon lengkapi kode kelas, nama mata kuliah, dan pilih dosen pengampu.", "error");
       return;
     }
 
+    setIsSubmitting(true);
     try {
       if (editingClass) {
         await apiFetch(`/admin/classes/${editingClass.id}`, {
@@ -189,12 +200,14 @@ export default function AdminKelasPage() {
           method: "POST",
           body: JSON.stringify(formData),
         });
-        notify("Kelas baru berhasil ditambahkan.");
+        notify("Kelas baru berhasil dibuat dan ditambahkan!");
       }
       setShowCreateModal(false);
       fetchCampusClasses();
     } catch (err: any) {
-      notify("Gagal menyimpan kelas: " + err.message);
+      notify("Gagal menyimpan kelas: " + err.message, "error");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -205,7 +218,7 @@ export default function AdminKelasPage() {
       setDeletingClassId(null);
       fetchCampusClasses();
     } catch (err: any) {
-      notify("Gagal menghapus kelas: " + err.message);
+      notify("Gagal menghapus kelas: " + err.message, "error");
     }
   };
 
@@ -302,8 +315,14 @@ export default function AdminKelasPage() {
     <div className="flex min-h-screen bg-[#F8FAFC] text-slate-800 font-sans text-xs">
       {/* Toast Notification */}
       {showToast && (
-        <div className="fixed top-5 right-5 z-50 flex items-center gap-2 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl text-xs border border-slate-700">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+        <div
+          className={`fixed top-5 right-5 z-50 flex items-center gap-2 px-4 py-3 rounded-xl shadow-2xl text-xs border animate-in fade-in slide-in-from-top-2 ${
+            toastType === "success"
+              ? "bg-slate-900 text-white border-slate-700"
+              : "bg-rose-600 text-white border-rose-700"
+          }`}
+        >
+          <CheckCircle2 className={`w-4 h-4 ${toastType === "success" ? "text-emerald-400" : "text-white"}`} />
           <span>{toastMsg}</span>
         </div>
       )}
@@ -311,7 +330,7 @@ export default function AdminKelasPage() {
       <AdminSidebar currentPath="/Admin/kelas" />
 
       <main className="flex-1 min-w-0 flex flex-col">
-        <AdminHeader breadcrumbs={["Portal", "Sistem Akademik", "Manajemen Data Kelas"]} />
+        <AdminHeader breadcrumbs={["Portal", "Sistem Akademik", "Manajemen & Tambah Kelas"]} />
 
         <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto w-full">
           {/* Top Bar */}
@@ -319,10 +338,10 @@ export default function AdminKelasPage() {
             <div>
               <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
                 <Layers className="w-5 h-5 text-indigo-600" />
-                <span>Manajemen Data Kelas Perkuliahan</span>
+                <span>Manajemen & Tambah Data Kelas</span>
               </h1>
               <p className="text-slate-500 text-xs mt-1">
-                Kelola rombongan belajar, penugasan dosen pengampu, dan mahasiswa terdaftar lintas program studi.
+                Kelola rombongan belajar, tambah kelas perkuliahan baru, penugasan dosen pengampu, dan mahasiswa kelas.
               </p>
             </div>
 
@@ -423,8 +442,18 @@ export default function AdminKelasPage() {
                     </tr>
                   ) : filteredClasses.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-8 text-center text-slate-400 italic">
-                        Tidak ada kelas perkuliahan yang cocok dengan pencarian Anda.
+                      <td colSpan={6} className="py-12 text-center text-slate-500">
+                        <Layers className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                        <p className="font-semibold text-slate-700">Tidak ada kelas perkuliahan ditemukan.</p>
+                        <p className="text-slate-400 text-xs mt-0.5">Silakan sesuaikan filter pencarian atau buat kelas baru.</p>
+                        <button
+                          type="button"
+                          onClick={openCreateModal}
+                          className="mt-3 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>Tambah Kelas Baru</span>
+                        </button>
                       </td>
                     </tr>
                   ) : (
@@ -672,17 +701,37 @@ export default function AdminKelasPage() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Kapasitas Maksimal Mahasiswa
-                </label>
-                <input
-                  type="number"
-                  min={1}
-                  value={formData.capacity}
-                  onChange={(e) => setFormData({ ...formData, capacity: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-600 outline-none"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Tahun Akademik
+                  </label>
+                  <select
+                    value={formData.academic_year}
+                    onChange={(e) => setFormData({ ...formData, academic_year: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-600 outline-none bg-white"
+                  >
+                    {ACADEMIC_YEAR_OPTIONS.map((y) => (
+                      <option key={y} value={y}>
+                        {y}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Kapasitas Maksimal Mahasiswa
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={200}
+                    value={formData.capacity}
+                    onChange={(e) => setFormData({ ...formData, capacity: Number(e.target.value) })}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-600 outline-none"
+                  />
+                </div>
               </div>
 
               <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
@@ -695,9 +744,20 @@ export default function AdminKelasPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-md shadow-indigo-600/20 transition"
+                  disabled={isSubmitting}
+                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold rounded-xl text-xs shadow-md shadow-indigo-600/20 transition flex items-center gap-1.5"
                 >
-                  {editingClass ? "Simpan Perubahan" : "Buat Kelas"}
+                  {isSubmitting ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      <span>Menyimpan...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>{editingClass ? "Simpan Perubahan" : "Buat Kelas"}</span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>
