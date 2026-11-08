@@ -17,11 +17,7 @@ export default function AuthGuard({ children, requiredRole }: AuthGuardProps) {
     const role = (typeof window !== "undefined" ? localStorage.getItem("gradia_role") : null) || "dosen";
 
     if (!token) {
-      if (requiredRole === "admin") {
-        router.replace("/auth/admin");
-      } else {
-        router.replace("/auth/login");
-      }
+      router.replace("/auth/login");
       return;
     }
 
@@ -38,7 +34,7 @@ export default function AuthGuard({ children, requiredRole }: AuthGuardProps) {
     // Proteksi berbasis role
     // Portal Admin hanya boleh dimasuki oleh role admin
     if (requiredRole === "admin" && role !== "admin") {
-      router.replace("/auth/admin");
+      router.replace("/auth/login");
       return;
     }
 

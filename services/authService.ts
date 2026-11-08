@@ -32,12 +32,21 @@ export interface AuthLecturer {
   consultHours?: string;
 }
 
+export interface AuthAdmin {
+  id: number;
+  username: string;
+  email: string;
+  name: string;
+  role: string;
+}
+
 export interface AuthResponse {
   message: string;
   token: string;
   role: string;
   user: AuthUser;
   lecturer?: AuthLecturer;
+  admin?: AuthAdmin;
 }
 
 export const authService = {
@@ -49,7 +58,7 @@ export const authService = {
   },
 
   async adminLogin(payload: AdminLoginPayload): Promise<AuthResponse> {
-    return apiFetch<AuthResponse>("/auth/admin-login", {
+    return apiFetch<AuthResponse>("/auth/login", {
       method: "POST",
       body: JSON.stringify(payload),
     });

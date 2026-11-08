@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { ShieldCheck } from "lucide-react";
 import { BreadcrumbProps } from "@/types/shared";
 
-export interface AdminHeaderProps extends BreadcrumbProps {}
+export type AdminHeaderProps = BreadcrumbProps;
 
 export default function AdminHeader({
   breadcrumbs = ["Portal", "Sistem Akademik", "Dashboard Administrator"],

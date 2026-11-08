@@ -31,6 +31,17 @@ export default function AnalitikAIPage() {
     source: string;
   } | null>(null);
 
+  const loadClassGrades = async (classId: number) => {
+    setSelectedClassId(classId);
+    try {
+      const res = await apiFetch(`/grades/${classId}`);
+      setStudents(res.grades || []);
+    } catch (err: any) {
+      console.warn("Error loading grades:", err.message);
+      setStudents([]);
+    }
+  };
+
   // Load classes
   useEffect(() => {
     apiFetch("/classes")
@@ -43,17 +54,6 @@ export default function AnalitikAIPage() {
       })
       .catch((err) => console.warn(err.message));
   }, []);
-
-  const loadClassGrades = async (classId: number) => {
-    setSelectedClassId(classId);
-    try {
-      const res = await apiFetch(`/grades/${classId}`);
-      setStudents(res.grades || []);
-    } catch (err: any) {
-      console.warn("Error loading grades:", err.message);
-      setStudents([]);
-    }
-  };
 
   // Compute live statistics
   const total = students.length;

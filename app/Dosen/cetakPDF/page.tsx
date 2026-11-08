@@ -14,6 +14,16 @@ export default function CetakLaporanPDFPage() {
   const [grades, setGrades] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const fetchGrades = (classId: number) => {
+    setIsLoading(true);
+    apiFetch(`/grades/${classId}`)
+      .then((res) => {
+        setGrades(res.grades || []);
+      })
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
+  };
+
   useEffect(() => {
     const stored = typeof window !== "undefined" ? localStorage.getItem("gradia_lecturer") : null;
     if (stored) {
@@ -37,16 +47,6 @@ export default function CetakLaporanPDFPage() {
         setIsLoading(false);
       });
   }, []);
-
-  const fetchGrades = (classId: number) => {
-    setIsLoading(true);
-    apiFetch(`/grades/${classId}`)
-      .then((res) => {
-        setGrades(res.grades || []);
-      })
-      .catch(console.error)
-      .finally(() => setIsLoading(false));
-  };
 
   const handleClassChange = (classId: number) => {
     setSelectedClassId(classId);
