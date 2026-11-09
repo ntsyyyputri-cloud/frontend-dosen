@@ -181,7 +181,7 @@ export interface GenericMessageResponse {
 export const adminService = {
   // Stats
   async getStats(): Promise<AdminStatsResponse> {
-    return apiFetch<AdminStatsResponse>("/admin/stats");
+    return apiFetch<AdminStatsResponse>("/admin/dashboard");
   },
 
   // Lecturers

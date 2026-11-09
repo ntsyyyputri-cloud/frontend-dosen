@@ -23,18 +23,19 @@ export default function AdminHeader({
   }, []);
 
   return (
-    <header className="bg-white border-b border-slate-200 px-6 py-3.5 flex items-center justify-between sticky top-0 z-10 shadow-xs">
+    <header className="bg-white border-b border-slate-200 px-6 py-3.5 flex items-center justify-between sticky top-0 z-10 shadow-xs notranslate" translate="no">
       {/* Breadcrumbs */}
-      <div className="flex items-center gap-2 text-slate-400 text-xs">
+      <div className="flex items-center gap-2 text-slate-400 text-xs notranslate" translate="no">
         {breadcrumbs.map((crumb, idx) => (
           <React.Fragment key={idx}>
             {idx > 0 && <span className="text-slate-300">&rsaquo;</span>}
             <span
-              className={
+              translate="no"
+              className={`notranslate ${
                 idx === breadcrumbs.length - 1
                   ? "text-slate-800 font-semibold"
                   : "hover:text-slate-600 transition"
-              }
+              }`}
             >
               {crumb}
             </span>

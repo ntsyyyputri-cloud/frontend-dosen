@@ -1,21 +1,23 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
+import AuthGuard from "@/components/shared/AuthGuard";
 import { CheckCircle2, X } from "lucide-react";
 import { useAdminLecturers } from "@/hooks/useAdminLecturers";
 import {
   LecturerHeader,
-  LecturerCredentialsNotice,
   LecturerSearchBar,
   LecturerTable,
   CreateLecturerModal,
   DeleteLecturerModal,
   ResetPasswordModal,
-} from "@/components/admin/dosen";
+} from "./components";
 
 export default function AdminDosenPage() {
+  const router = useRouter();
   const {
     lecturers,
     filteredLecturers,
@@ -28,8 +30,6 @@ export default function AdminDosenPage() {
     setDeleteTarget,
     isDeleting,
     handleDeleteLecturer,
-    impersonatingId,
-    handleQuickLogin,
     resetTarget,
     setResetTarget,
     resetPasswordVal,
@@ -48,98 +48,100 @@ export default function AdminDosenPage() {
   } = useAdminLecturers();
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] text-slate-800 font-sans text-xs">
-      <AdminSidebar currentPath="/Admin/dosen" />
+    <AuthGuard requiredRole="admin">
+      <div className="flex min-h-screen bg-[#F8FAFC] text-slate-800 font-sans text-xs">
+        <AdminSidebar currentPath="/admin/dosen" />
 
-      <main className="flex-1 min-w-0 flex flex-col">
-        <AdminHeader breadcrumbs={["Portal", "Sistem Akademik", "Manajemen Akun Dosen"]} />
-
-        <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto w-full">
-          {/* Top Bar Header */}
-          <LecturerHeader
-            isLoading={isLoading}
-            onRefresh={fetchLecturers}
-            onOpenCreateModal={() => setIsModalOpen(true)}
+        <main className="flex-1 min-w-0 flex flex-col">
+          <AdminHeader
+            breadcrumbs={["Portal", "Sistem Akademik", "Manajemen Akun Dosen"]}
           />
 
-          {/* Toast Notification Banner */}
-          {notification && (
-            <div
-              className={`p-4 rounded-2xl border flex items-center justify-between text-xs font-semibold ${
-                notification.type === "success"
-                  ? "bg-emerald-50 border-emerald-200 text-emerald-800"
-                  : "bg-red-50 border-red-200 text-red-700"
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 shrink-0" />
-                <span>{notification.message}</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setNotification(null)}
-                className="text-slate-400 hover:text-slate-600"
+          <div className="p-4 md:p-8 space-y-6 max-w-7xl mx-auto w-full">
+            {/* Header Bar */}
+            <LecturerHeader
+              isLoading={isLoading}
+              onRefresh={fetchLecturers}
+              onOpenCreateModal={() => setIsModalOpen(true)}
+            />
+
+            {/* Notification Alert */}
+            {notification && (
+              <div
+                className={`p-4 rounded-xl border flex items-center justify-between text-xs font-semibold animate-in fade-in slide-in-from-top-2 duration-200 ${
+                  notification.type === "success"
+                    ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+                    : "bg-rose-50 border-rose-200 text-rose-800"
+                }`}
               >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          )}
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  <span>{notification.message}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setNotification(null)}
+                  className="hover:opacity-75 transition"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
 
-          {/* Info Banner: Kredensial Login Dosen */}
-          <LecturerCredentialsNotice />
+            {/* Search Input Bar */}
+            <LecturerSearchBar
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              filteredCount={filteredLecturers.length}
+              totalCount={lecturers.length}
+            />
 
-          {/* Search & Filter Bar */}
-          <LecturerSearchBar
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            filteredCount={filteredLecturers.length}
-            totalCount={lecturers.length}
-          />
+            {/* Lecturer Table */}
+            <LecturerTable
+              lecturers={filteredLecturers}
+              isLoading={isLoading}
+              onOpenResetPassword={(lec) => {
+                setResetTarget(lec);
+                setResetPasswordVal("password123");
+              }}
+              onOpenDeleteConfirm={(lec) => setDeleteTarget(lec)}
+              onViewClasses={(lec) => {
+                router.push(`/admin/kelas?search=${encodeURIComponent(lec.name)}`);
+              }}
+            />
+          </div>
+        </main>
 
-          {/* Lecturers Table */}
-          <LecturerTable
-            lecturers={filteredLecturers}
-            isLoading={isLoading}
-            impersonatingId={impersonatingId}
-            onQuickLogin={handleQuickLogin}
-            onOpenResetPassword={(lec) => {
-              setResetTarget(lec);
-              setResetPasswordVal("password123");
-            }}
-            onOpenDeleteConfirm={(lec) => setDeleteTarget(lec)}
-          />
-        </div>
-      </main>
+        {/* Modal Tambah Dosen */}
+        <CreateLecturerModal
+          isOpen={isModalOpen}
+          isPending={isPending}
+          actionState={actionState}
+          formData={formData}
+          setFormData={setFormData}
+          onClose={() => setIsModalOpen(false)}
+          formDispatch={formDispatch}
+          getFieldError={getFieldError}
+        />
 
-      {/* Modal Tambah Dosen Baru */}
-      <CreateLecturerModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        formData={formData}
-        setFormData={setFormData}
-        actionState={actionState}
-        formDispatch={formDispatch}
-        isPending={isPending}
-        getFieldError={getFieldError}
-      />
+        {/* Modal Konfirmasi Hapus Dosen */}
+        <DeleteLecturerModal
+          target={deleteTarget}
+          isDeleting={isDeleting}
+          onClose={() => setDeleteTarget(null)}
+          onConfirm={handleDeleteLecturer}
+        />
 
-      {/* Modal Konfirmasi Hapus Dosen */}
-      <DeleteLecturerModal
-        target={deleteTarget}
-        isDeleting={isDeleting}
-        onClose={() => setDeleteTarget(null)}
-        onConfirm={handleDeleteLecturer}
-      />
-
-      {/* Modal Reset Kata Sandi Dosen */}
-      <ResetPasswordModal
-        target={resetTarget}
-        resetPasswordVal={resetPasswordVal}
-        onPasswordChange={setResetPasswordVal}
-        isResetting={isResetting}
-        onClose={() => setResetTarget(null)}
-        onSubmit={handleResetPassword}
-      />
-    </div>
+        {/* Modal Reset Password Dosen */}
+        <ResetPasswordModal
+          target={resetTarget}
+          resetPasswordVal={resetPasswordVal}
+          onPasswordChange={setResetPasswordVal}
+          isResetting={isResetting}
+          onClose={() => setResetTarget(null)}
+          onSubmit={handleResetPassword}
+        />
+      </div>
+    </AuthGuard>
   );
 }

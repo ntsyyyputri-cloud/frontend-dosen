@@ -52,7 +52,22 @@ export function useAdminLecturers() {
     setIsLoading(true);
     try {
       const res = await apiFetch("/admin/lecturers");
-      if (res.lecturers) setLecturers(res.lecturers);
+      if (res.lecturers) {
+        const formatted = res.lecturers.map((lec: any) => {
+          const prefix = lec.title_prefix ? `${lec.title_prefix.trim()} ` : "";
+          const suffix = lec.title_suffix ? `, ${lec.title_suffix.trim()}` : "";
+          return {
+            ...lec,
+            fullName:
+              lec.fullName ||
+              `${prefix}${lec.name || ""}${suffix}`.trim() ||
+              lec.name ||
+              "Dosen",
+            total_classes: lec.total_classes ?? lec.class_count ?? 0,
+          };
+        });
+        setLecturers(formatted);
+      }
     } catch (err: any) {
       console.warn("Gagal mengambil data dosen:", err.message);
     } finally {
@@ -67,7 +82,19 @@ export function useAdminLecturers() {
   // Efek jika aksi Server Action berhasil
   useEffect(() => {
     if (actionState?.data?.success && actionState.data.newLecturer) {
-      setLecturers((prev) => [actionState.data!.newLecturer as any, ...prev]);
+      const lec = actionState.data.newLecturer as any;
+      const prefix = lec.title_prefix ? `${lec.title_prefix.trim()} ` : "";
+      const suffix = lec.title_suffix ? `, ${lec.title_suffix.trim()}` : "";
+      const formatted = {
+        ...lec,
+        fullName:
+          lec.fullName ||
+          `${prefix}${lec.name || ""}${suffix}`.trim() ||
+          lec.name ||
+          "Dosen",
+        total_classes: lec.total_classes ?? 0,
+      };
+      setLecturers((prev) => [formatted, ...prev]);
       setIsModalOpen(false);
       setFormData(INITIAL_FORM_DATA);
     }
@@ -138,12 +165,12 @@ export function useAdminLecturers() {
 
   // Filter berdasarkan search
   const filteredLecturers = lecturers.filter((l) => {
-    const q = searchQuery.toLowerCase();
-    return (
-      l.fullName.toLowerCase().includes(q) ||
-      l.nidn.toLowerCase().includes(q) ||
-      l.email.toLowerCase().includes(q)
-    );
+    const q = (searchQuery || "").toLowerCase();
+    const fullName = (l.fullName || l.name || "").toLowerCase();
+    const nidn = (l.nidn || "").toLowerCase();
+    const email = (l.email || "").toLowerCase();
+
+    return fullName.includes(q) || nidn.includes(q) || email.includes(q);
   });
 
   return {

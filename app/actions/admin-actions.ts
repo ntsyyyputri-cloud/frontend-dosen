@@ -41,8 +41,8 @@ export const createLecturerByAdminAction = adminActionClient
       throw new Error(data.error || "Gagal menambahkan dosen ke database.");
     }
 
-    revalidatePath("/Admin/dosen");
-    revalidatePath("/Admin/dashboard");
+    revalidatePath("/admin/dosen");
+    revalidatePath("/admin/dashboard");
 
     return {
       success: true,
@@ -82,8 +82,8 @@ export const deleteLecturerByAdminAction = adminActionClient
       throw new Error(data.error || "Gagal menghapus akun dosen.");
     }
 
-    revalidatePath("/Admin/dosen");
-    revalidatePath("/Admin/dashboard");
+    revalidatePath("/admin/dosen");
+    revalidatePath("/admin/dashboard");
 
     return {
       success: true,
@@ -121,8 +121,8 @@ export const createStudentByAdminAction = adminActionClient
       throw new Error(data.error || "Gagal menambahkan mahasiswa ke database.");
     }
 
-    revalidatePath("/Admin/mahasiswa");
-    revalidatePath("/Admin/dashboard");
+    revalidatePath("/admin/mahasiswa");
+    revalidatePath("/admin/dashboard");
 
     return {
       success: true,
@@ -161,8 +161,8 @@ export const deleteStudentByAdminAction = adminActionClient
       throw new Error(data.error || "Gagal menghapus data mahasiswa.");
     }
 
-    revalidatePath("/Admin/mahasiswa");
-    revalidatePath("/Admin/dashboard");
+    revalidatePath("/admin/mahasiswa");
+    revalidatePath("/admin/dashboard");
 
     return {
       success: true,

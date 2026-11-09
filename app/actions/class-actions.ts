@@ -42,7 +42,7 @@ export const createClassAction = authActionClient
     }
 
     // Revalidasi cache halaman Next.js
-    revalidatePath("/Admin/kelas");
+    revalidatePath("/admin/kelas");
 
     return {
       success: true,

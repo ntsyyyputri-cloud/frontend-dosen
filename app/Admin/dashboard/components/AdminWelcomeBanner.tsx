@@ -30,14 +30,14 @@ export default function AdminWelcomeBanner({
 
       <div className="mt-6 flex flex-wrap gap-3 relative z-10">
         <Link
-          href="/Admin/dosen"
+          href="/admin/dosen"
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold shadow-sm transition-all text-xs"
         >
           <UserPlus className="w-4 h-4" />
           <span>Kelola Akun Dosen</span>
         </Link>
         <Link
-          href="/Admin/mahasiswa"
+          href="/admin/mahasiswa"
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold backdrop-blur-md border border-white/10 transition-all text-xs"
         >
           <Users className="w-4 h-4" />

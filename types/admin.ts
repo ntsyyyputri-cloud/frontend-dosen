@@ -39,4 +39,6 @@ export interface AdminStatsResponse {
 }
 
 export * from "./lecturer";
+export * from "./student";
+export * from "./class";
 

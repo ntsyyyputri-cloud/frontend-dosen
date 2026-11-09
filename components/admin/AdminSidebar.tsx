@@ -12,7 +12,7 @@ export interface AdminSidebarProps {
   currentPath?: string;
 }
 
-export default function AdminSidebar({ currentPath = "/Admin/dashboard" }: AdminSidebarProps) {
+export default function AdminSidebar({ currentPath = "/admin/dashboard" }: AdminSidebarProps) {
   const router = useRouter();
   const [adminUser, setAdminUser] = useState<any>(null);
 
@@ -40,11 +40,11 @@ export default function AdminSidebar({ currentPath = "/Admin/dashboard" }: Admin
   };
 
   return (
-    <aside className="w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 p-4 sticky top-0 h-screen overflow-y-auto z-20">
+    <aside className="w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 p-4 sticky top-0 h-screen overflow-y-auto z-20 notranslate" translate="no">
       <div>
         {/* Brand Header */}
         <div className="flex items-center justify-between mb-6 px-1">
-          <Link href="/Admin/dashboard" className="flex items-center gap-3">
+          <Link href="/admin/dashboard" className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden shrink-0">
               <Image
                 src={logoImg}
@@ -92,7 +92,7 @@ export default function AdminSidebar({ currentPath = "/Admin/dashboard" }: Admin
                             isActive ? "text-white" : "text-slate-400"
                           }`}
                         />
-                        <span>{item.label}</span>
+                        <span translate="no" className="notranslate">{item.label}</span>
                       </div>
                     </Link>
                   );

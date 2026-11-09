@@ -20,7 +20,7 @@ export default function RecentLecturersCard({
           <p className="text-slate-400 text-[11px]">Akun dosen yang baru-baru ini dibuat</p>
         </div>
         <Link
-          href="/Admin/dosen"
+          href="/admin/dosen"
           className="text-indigo-600 hover:text-indigo-700 font-semibold text-xs flex items-center gap-1"
         >
           <span>Kelola Dosen</span>

@@ -18,7 +18,7 @@ export const ADMIN_MENU_GROUPS: MenuGroup[] = [
     items: [
       {
         label: "Dashboard Utama",
-        href: "/Admin/dashboard",
+        href: "/admin/dashboard",
         icon: LayoutDashboard,
       },
     ],
@@ -28,23 +28,18 @@ export const ADMIN_MENU_GROUPS: MenuGroup[] = [
     items: [
       {
         label: "Manajemen Dosen",
-        href: "/Admin/dosen",
+        href: "/admin/dosen",
         icon: GraduationCap,
       },
       {
-        label: "Master Mahasiswa",
-        href: "/Admin/mahasiswa",
-        icon: Users,
-      },
-    ],
-  },
-  {
-    group: "PENGELOLAAN AKADEMIK",
-    items: [
-      {
-        label: "Manajemen Data Kelas",
-        href: "/Admin/kelas",
+        label: "Manajemen Kelas",
+        href: "/admin/kelas",
         icon: Layers,
+      },
+      {
+        label: "Master Mahasiswa",
+        href: "/admin/mahasiswa",
+        icon: Users,
       },
     ],
   },
@@ -56,7 +51,7 @@ export const DOSEN_MENU_GROUPS: MenuGroup[] = [
     items: [
       {
         label: "Dashboard",
-        href: "/Dosen/dashboard",
+        href: "/dosen/dashboard",
         icon: LayoutDashboard,
       },
     ],
@@ -66,12 +61,12 @@ export const DOSEN_MENU_GROUPS: MenuGroup[] = [
     items: [
       {
         label: "Input Rekap Nilai",
-        href: "/Dosen/inputnilai",
+        href: "/dosen/inputnilai",
         icon: FileEdit,
       },
       {
         label: "Import Nilai & Generate AI",
-        href: "/Dosen/importnilai",
+        href: "/dosen/importnilai",
         icon: Sparkles,
       },
     ],
@@ -81,12 +76,12 @@ export const DOSEN_MENU_GROUPS: MenuGroup[] = [
     items: [
       {
         label: "Analitik & AI Feedback",
-        href: "/Dosen/analitikAI",
+        href: "/dosen/analitikAI",
         icon: BarChart3,
       },
       {
         label: "Cetak PDF & Laporan",
-        href: "/Dosen/cetakPDF",
+        href: "/dosen/cetakPDF",
         icon: Printer,
       },
     ],
@@ -96,15 +91,14 @@ export const DOSEN_MENU_GROUPS: MenuGroup[] = [
     items: [
       {
         label: "Kelola Profil",
-        href: "/Dosen/profil",
+        href: "/dosen/profil",
         icon: User,
       },
       {
         label: "Keamanan & Akun",
-        href: "/Dosen/keamanan",
+        href: "/dosen/keamanan",
         icon: ShieldCheck,
       },
     ],
   },
 ];
-

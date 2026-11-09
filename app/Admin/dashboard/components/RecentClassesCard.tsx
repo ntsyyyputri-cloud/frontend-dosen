@@ -20,7 +20,7 @@ export default function RecentClassesCard({ recentClasses }: RecentClassesCardPr
           <p className="text-slate-400 text-[11px]">5 kelas terakhir yang dibuat di sistem</p>
         </div>
         <Link
-          href="/Admin/kelas"
+          href="/admin/dosen?tab=kelas"
           className="text-indigo-600 hover:text-indigo-700 font-semibold text-xs flex items-center gap-1"
         >
           <span>Lihat Semua</span>

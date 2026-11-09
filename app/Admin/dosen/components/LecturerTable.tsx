@@ -4,7 +4,6 @@ import {
   Phone,
   Building,
   Layers,
-  LogIn,
   KeyRound,
   Trash2,
   RefreshCw,
@@ -14,22 +13,20 @@ import { LecturerData } from "@/types/lecturer";
 interface LecturerTableProps {
   lecturers: LecturerData[];
   isLoading: boolean;
-  impersonatingId: number | null;
-  onQuickLogin: (lec: LecturerData) => void;
   onOpenResetPassword: (lec: LecturerData) => void;
   onOpenDeleteConfirm: (lec: LecturerData) => void;
+  onViewClasses?: (lec: LecturerData) => void;
 }
 
 export function LecturerTable({
   lecturers,
   isLoading,
-  impersonatingId,
-  onQuickLogin,
   onOpenResetPassword,
   onOpenDeleteConfirm,
+  onViewClasses,
 }: LecturerTableProps) {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden notranslate" translate="no">
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
@@ -61,10 +58,10 @@ export function LecturerTable({
                   <td className="py-3.5 px-4">
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
-                        {lec.name[0] || "D"}
+                        {lec.name?.[0] || "D"}
                       </div>
                       <div>
-                        <p className="font-bold text-slate-900 text-xs">{lec.fullName}</p>
+                        <p className="font-bold text-slate-900 text-xs">{lec.fullName || lec.name}</p>
                         <p className="text-[10px] text-indigo-600 font-semibold mt-0.5">
                           NIDN: {lec.nidn}
                         </p>
@@ -92,29 +89,25 @@ export function LecturerTable({
                     </div>
                   </td>
                   <td className="py-3.5 px-4 text-center">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 font-bold text-[11px]">
-                      <Layers className="w-3 h-3" />
-                      <span>{lec.total_classes || 0} Kelas</span>
-                    </span>
+                    {onViewClasses ? (
+                      <button
+                        type="button"
+                        onClick={() => onViewClasses(lec)}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-[11px] transition-all cursor-pointer shadow-2xs"
+                        title={`Lihat kelas yang diampu oleh ${lec.name}`}
+                      >
+                        <Layers className="w-3 h-3" />
+                        <span>{lec.total_classes ?? (lec as any).class_count ?? 0} Kelas</span>
+                      </button>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 font-bold text-[11px]">
+                        <Layers className="w-3 h-3" />
+                        <span>{lec.total_classes ?? (lec as any).class_count ?? 0} Kelas</span>
+                      </span>
+                    )}
                   </td>
                   <td className="py-3.5 px-4 text-right">
                     <div className="flex items-center justify-end gap-1.5">
-                      {/* Tombol Login Cepat ke Dashboard Dosen */}
-                      <button
-                        type="button"
-                        onClick={() => onQuickLogin(lec)}
-                        disabled={impersonatingId === lec.id}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs border border-indigo-200/80 transition-all shadow-xs disabled:opacity-50"
-                        title="Masuk langsung ke Dashboard Dosen ini"
-                      >
-                        {impersonatingId === lec.id ? (
-                          <RefreshCw className="w-3.5 h-3.5 animate-spin text-indigo-600" />
-                        ) : (
-                          <LogIn className="w-3.5 h-3.5 text-indigo-600" />
-                        )}
-                        <span>Login Cepat</span>
-                      </button>
-
                       {/* Tombol Reset Kata Sandi */}
                       <button
                         type="button"

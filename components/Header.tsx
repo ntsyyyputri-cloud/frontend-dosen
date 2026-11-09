@@ -51,7 +51,7 @@ export default function Header({
       <div className="flex items-center gap-3">
         {isAdmin && (
           <a
-            href="/Admin/dashboard"
+            href="/admin/dashboard"
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[11px] shadow-xs transition"
           >
             <span>Portal Admin</span>

@@ -47,7 +47,7 @@ export const adminActionClient = actionClient.use(async ({ next }) => {
     throw new Error("Akses ditolak: Anda belum login atau sesi Administrator telah berakhir.");
   }
 
-  if (role && role !== "admin") {
+  if (role && role !== "admin" && role !== "superadmin") {
     throw new Error("Akses ditolak: Aksi ini hanya diizinkan untuk Administrator kampus.");
   }
 
