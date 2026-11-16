@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Save, Upload } from "lucide-react";
+import { Save, Upload, MessageSquare } from "lucide-react";
 
 interface GradeClassHeaderProps {
   classes: any[];
@@ -10,6 +10,8 @@ interface GradeClassHeaderProps {
   onClassChange: (classId: number) => void;
   onSave: () => void;
   isSaving: boolean;
+  appealsCount?: number;
+  onOpenAppeals?: () => void;
 }
 
 export function GradeClassHeader({
@@ -18,6 +20,8 @@ export function GradeClassHeader({
   onClassChange,
   onSave,
   isSaving,
+  appealsCount = 0,
+  onOpenAppeals,
 }: GradeClassHeaderProps) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -52,6 +56,20 @@ export function GradeClassHeader({
             ))
           )}
         </select>
+
+        <button
+          type="button"
+          onClick={onOpenAppeals}
+          className="relative flex items-center gap-1.5 px-3 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold rounded-xl transition-all shadow-2xs text-xs"
+        >
+          <MessageSquare className="w-3.5 h-3.5 text-amber-600" />
+          <span>Koreksi Mahasiswa</span>
+          {appealsCount > 0 && (
+            <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold ml-0.5 animate-pulse">
+              {appealsCount}
+            </span>
+          )}
+        </button>
 
         <Link
           href="/dosen/importnilai"

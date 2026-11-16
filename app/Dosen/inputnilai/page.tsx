@@ -1,16 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AuthGuard from "@/components/AuthGuard";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { CheckCircle2 } from "lucide-react";
 import { useInputNilai } from "@/hooks/useInputNilai";
+import { gradeService } from "@/services/gradeService";
+import { GradeAppeal } from "@/types/grade";
 import {
   GradeClassHeader,
   GradeStatsCards,
   GradeFilterTabs,
   GradeTable,
+  GradeAppealsModal,
 } from "./components";
 
 export default function InputNilaiPage() {
@@ -34,6 +37,42 @@ export default function InputNilaiPage() {
     toastMessage,
     isSaving,
   } = useInputNilai();
+
+  const [isAppealsOpen, setIsAppealsOpen] = useState(false);
+  const [appeals, setAppeals] = useState<GradeAppeal[]>([]);
+
+  useEffect(() => {
+    if (!activeClassId) return;
+    gradeService
+      .getAppealsByClass(activeClassId)
+      .then((res) => {
+        if (res && res.appeals) setAppeals(res.appeals);
+      })
+      .catch((err) => {
+        console.warn("Gagal memuat sanggahan nilai:", err);
+      });
+  }, [activeClassId]);
+
+  const handleUpdateAppealStatus = async (
+    appealId: number,
+    status: "approved" | "rejected",
+    response?: string
+  ) => {
+    try {
+      await gradeService.updateAppeal(appealId, status, response);
+      setAppeals((prev) =>
+        prev.map((a) =>
+          a.id === appealId
+            ? { ...a, status, lecturer_response: response || null }
+            : a
+        )
+      );
+    } catch (err: any) {
+      console.error("Gagal mengupdate status sanggahan:", err);
+    }
+  };
+
+  const pendingAppealsCount = appeals.filter((a) => a.status === "pending").length;
 
   return (
     <AuthGuard>
@@ -63,6 +102,8 @@ export default function InputNilaiPage() {
               onClassChange={loadGradesForClass}
               onSave={handleSaveGrades}
               isSaving={isSaving}
+              appealsCount={pendingAppealsCount}
+              onOpenAppeals={() => setIsAppealsOpen(true)}
             />
 
             {/* Stats Cards */}
@@ -92,6 +133,14 @@ export default function InputNilaiPage() {
             />
           </main>
         </div>
+
+        {/* Modal Koreksi Nilai Mahasiswa */}
+        <GradeAppealsModal
+          isOpen={isAppealsOpen}
+          onClose={() => setIsAppealsOpen(false)}
+          appeals={appeals}
+          onUpdateStatus={handleUpdateAppealStatus}
+        />
       </div>
     </AuthGuard>
   );

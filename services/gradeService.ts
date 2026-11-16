@@ -28,5 +28,16 @@ export const gradeService = {
       method: "PUT",
     });
   },
+
+  async getAppealsByClass(classId: number) {
+    return apiFetch<{ appeals: any[] }>(`/grades/${classId}/appeals`);
+  },
+
+  async updateAppeal(appealId: number, status: "approved" | "rejected" | "pending", response?: string) {
+    return apiFetch<{ message: string; appeal: any }>(`/grades/appeals/${appealId}`, {
+      method: "PATCH",
+      body: JSON.stringify({ status, lecturer_response: response }),
+    });
+  },
 };
 
