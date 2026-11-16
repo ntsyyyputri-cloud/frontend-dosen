@@ -19,6 +19,7 @@ export default function AdminKelasPage() {
   const {
     classes,
     filteredClasses,
+    prodiOptions,
     lecturers,
     masterStudents,
     searchQuery,
@@ -103,6 +104,7 @@ export default function AdminKelasPage() {
               onSemesterChange={setSelectedSemester}
               filteredCount={filteredClasses.length}
               totalCount={classes.length}
+              prodiOptions={prodiOptions}
             />
 
             {/* Class Table */}
@@ -125,6 +127,7 @@ export default function AdminKelasPage() {
           setFormData={setFormData}
           lecturers={lecturers}
           isSubmitting={isSubmitting}
+          prodiOptions={prodiOptions}
           onClose={() => {
             setShowCreateModal(false);
           }}

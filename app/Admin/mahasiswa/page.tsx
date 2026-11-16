@@ -17,6 +17,7 @@ export default function AdminMahasiswaPage() {
   const {
     students,
     filteredStudents,
+    prodiOptions,
     searchQuery,
     setSearchQuery,
     selectedProdi,
@@ -61,6 +62,7 @@ export default function AdminMahasiswaPage() {
               onProdiChange={setSelectedProdi}
               filteredCount={filteredStudents.length}
               totalCount={students.length}
+              prodiOptions={prodiOptions}
             />
 
             {/* Students Table */}
@@ -82,6 +84,7 @@ export default function AdminMahasiswaPage() {
           formDispatch={formDispatch}
           isPending={isPending}
           getFieldError={getFieldError}
+          prodiOptions={prodiOptions}
         />
 
         {/* Modal Konfirmasi Hapus Mahasiswa */}

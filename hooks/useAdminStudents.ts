@@ -3,13 +3,13 @@
 import { useEffect, useState, useActionState } from "react";
 import { apiFetch } from "@/lib/api";
 import { createStudentByAdminAction } from "@/app/actions/admin-actions";
-import { StudentData, StudentFormData } from "@/types/student";
+import { StudentData, StudentFormData, PRODI_OPTIONS } from "@/types/student";
 
 const INITIAL_FORM: StudentFormData = {
   nim: "",
   name: "",
   email: "",
-  prodi: "S1 Informatika",
+  prodi: "Teknik Informatika",
   status: "Aktif",
 };
 
@@ -76,6 +76,15 @@ export function useAdminStudents() {
     }
   };
 
+  // Opsi Program Studi Dinamis & Terstandarisasi
+  const prodiOptions = Array.from(
+    new Set([
+      "Semua Prodi",
+      ...PRODI_OPTIONS.filter((p) => p !== "Semua Prodi"),
+      ...students.map((s) => s.prodi?.trim()).filter(Boolean),
+    ])
+  );
+
   // Filter Mahasiswa
   const filteredStudents = students.filter((s) => {
     const matchesSearch =
@@ -83,8 +92,26 @@ export function useAdminStudents() {
       s.nim.toLowerCase().includes(searchQuery.toLowerCase()) ||
       s.email.toLowerCase().includes(searchQuery.toLowerCase());
 
+    const normSelected = selectedProdi.trim().toLowerCase();
+    const normStudentProdi = (s.prodi || "").trim().toLowerCase();
+
     const matchesProdi =
-      selectedProdi === "Semua Prodi" || s.prodi.toLowerCase() === selectedProdi.toLowerCase();
+      selectedProdi === "Semua Prodi" ||
+      normStudentProdi === normSelected ||
+      (normSelected === "teknik informatika" &&
+        (normStudentProdi === "s1 informatika" ||
+          normStudentProdi === "informatika" ||
+          normStudentProdi === "s1 teknik informatika")) ||
+      (normStudentProdi === "teknik informatika" &&
+        (normSelected === "s1 informatika" ||
+          normSelected === "informatika" ||
+          normSelected === "s1 teknik informatika")) ||
+      (normSelected === "sistem informasi" && normStudentProdi === "s1 sistem informasi") ||
+      (normStudentProdi === "sistem informasi" && normSelected === "s1 sistem informasi") ||
+      (normSelected === "teknologi informasi" && normStudentProdi === "s1 teknologi informasi") ||
+      (normStudentProdi === "teknologi informasi" && normSelected === "s1 teknologi informasi") ||
+      (normSelected === "manajemen informatika" && normStudentProdi === "d3 manajemen informatika") ||
+      (normStudentProdi === "manajemen informatika" && normSelected === "d3 manajemen informatika");
 
     return matchesSearch && matchesProdi;
   });
@@ -92,6 +119,7 @@ export function useAdminStudents() {
   return {
     students,
     filteredStudents,
+    prodiOptions,
     searchQuery,
     setSearchQuery,
     selectedProdi,

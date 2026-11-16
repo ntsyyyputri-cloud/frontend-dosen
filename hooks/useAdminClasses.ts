@@ -7,13 +7,14 @@ import {
   LecturerOption,
   ClassStudentItem,
   ClassFormData,
+  CLASS_PRODI_OPTIONS,
 } from "@/types/class";
 
 const INITIAL_FORM: ClassFormData = {
   code: "",
   title: "",
   sks: 3,
-  prodi: "S1 Informatika",
+  prodi: "Teknik Informatika",
   semester: 1,
   academic_year: "2024/2025 Ganjil",
   capacity: 40,
@@ -234,6 +235,16 @@ export function useAdminClasses() {
     }
   };
 
+  // Opsi Program Studi Dinamis & Terstandarisasi (mencakup semua prodi yang terdaftar di kelas & mahasiswa)
+  const prodiOptions = Array.from(
+    new Set([
+      "Semua Prodi",
+      ...CLASS_PRODI_OPTIONS.filter((p) => p !== "Semua Prodi"),
+      ...classes.map((c) => c.prodi?.trim()).filter(Boolean),
+      ...masterStudents.map((s) => s.prodi?.trim()).filter(Boolean),
+    ])
+  );
+
   // Filter kelas kampus
   const filteredClasses = classes.filter((c) => {
     const q = searchQuery.toLowerCase();
@@ -243,8 +254,26 @@ export function useAdminClasses() {
       (c.lecturerFullName && c.lecturerFullName.toLowerCase().includes(q)) ||
       (c.lecturer_nidn && c.lecturer_nidn.toLowerCase().includes(q));
 
+    const normSelected = selectedProdi.trim().toLowerCase();
+    const normClassProdi = (c.prodi || "").trim().toLowerCase();
+
     const matchesProdi =
-      selectedProdi === "Semua Prodi" || c.prodi.toLowerCase() === selectedProdi.toLowerCase();
+      selectedProdi === "Semua Prodi" ||
+      normClassProdi === normSelected ||
+      (normSelected === "teknik informatika" &&
+        (normClassProdi === "s1 informatika" ||
+          normClassProdi === "informatika" ||
+          normClassProdi === "s1 teknik informatika")) ||
+      (normClassProdi === "teknik informatika" &&
+        (normSelected === "s1 informatika" ||
+          normSelected === "informatika" ||
+          normSelected === "s1 teknik informatika")) ||
+      (normSelected === "sistem informasi" && normClassProdi === "s1 sistem informasi") ||
+      (normClassProdi === "sistem informasi" && normSelected === "s1 sistem informasi") ||
+      (normSelected === "teknologi informasi" && normClassProdi === "s1 teknologi informasi") ||
+      (normClassProdi === "teknologi informasi" && normSelected === "s1 teknologi informasi") ||
+      (normSelected === "manajemen informatika" && normClassProdi === "d3 manajemen informatika") ||
+      (normClassProdi === "manajemen informatika" && normSelected === "d3 manajemen informatika");
 
     const matchesSemester =
       selectedSemester === "Semua" || String(c.semester) === selectedSemester;
@@ -255,6 +284,7 @@ export function useAdminClasses() {
   return {
     classes,
     filteredClasses,
+    prodiOptions,
     lecturers,
     masterStudents,
     searchQuery,

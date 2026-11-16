@@ -100,25 +100,28 @@ export default function AuthGuard({ children, requiredRole }: AuthGuardProps) {
     }
 
     // 4. Aturan Akses Role Ketat:
+    const currentPath = typeof window !== "undefined" ? window.location.pathname.toLowerCase() : "";
+    const targetRole = requiredRole || (currentPath.startsWith("/admin") ? "admin" : "dosen");
+
     // Portal Admin hanya boleh diakses oleh Administrator
-    if (requiredRole === "admin" && !isAdmin) {
+    if (targetRole === "admin" && !isAdmin) {
       startTransition(() => {
-        router.replace(isDosen ? "/dosen/dashboard" : "/auth/login");
+        router.replace("/auth/login?error=unauthorized_role&role=admin");
       });
       return;
     }
 
     // Portal Dosen hanya boleh diakses oleh Dosen (Admin dilarang masuk ke dashboard dosen)
-    if (requiredRole === "dosen" && !isDosen) {
+    if (targetRole === "dosen" && !isDosen) {
       startTransition(() => {
-        router.replace(isAdmin ? "/admin/dashboard" : "/auth/login");
+        router.replace("/auth/login?error=unauthorized_role&role=dosen");
       });
       return;
     }
 
     // 5. Verifikasi Asinkron ke Backend Server
     // Memastikan token belum dicabut/dihapus di database
-    const verifyEndpoint = isAdmin ? "/admin/profile" : "/lecturer/profile";
+    const verifyEndpoint = targetRole === "admin" ? "/admin/profile" : "/lecturer/profile";
     apiFetch(verifyEndpoint)
       .then(() => {
         setIsAuthorized(true);

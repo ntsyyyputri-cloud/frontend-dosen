@@ -17,6 +17,7 @@ interface CreateEditClassModalProps {
   setFormData: React.Dispatch<React.SetStateAction<ClassFormData>>;
   lecturers: LecturerOption[];
   isSubmitting: boolean;
+  prodiOptions?: string[];
   onClose: () => void;
   onSubmit: (e: FormEvent) => void;
 }
@@ -28,10 +29,16 @@ export function CreateEditClassModal({
   setFormData,
   lecturers,
   isSubmitting,
+  prodiOptions,
   onClose,
   onSubmit,
 }: CreateEditClassModalProps) {
   if (!isOpen) return null;
+
+  const availableProdi =
+    prodiOptions && prodiOptions.length > 0
+      ? prodiOptions.filter((p) => p !== "Semua Prodi")
+      : CLASS_PRODI_OPTIONS.filter((p) => p !== "Semua Prodi");
 
   return (
     <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
@@ -123,7 +130,7 @@ export function CreateEditClassModal({
                 onChange={(e) => setFormData({ ...formData, prodi: e.target.value })}
                 className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-600 outline-none bg-white"
               >
-                {CLASS_PRODI_OPTIONS.filter((p) => p !== "Semua Prodi").map((p) => (
+                {availableProdi.map((p) => (
                   <option key={p} value={p}>
                     {p}
                   </option>
