@@ -8,10 +8,8 @@ import {
   TrendingUp,
   CheckCircle2,
   AlertTriangle,
-  Sliders,
 } from "lucide-react";
 import { WeightConfig } from "@/types/grade";
-import { WEIGHT_PRESETS } from "@/hooks/useInputNilai";
 
 interface GradeStatsCardsProps {
   averages: {
@@ -22,20 +20,16 @@ interface GradeStatsCardsProps {
   };
   totalStudents: number;
   weights: WeightConfig;
-  onWeightChange: (field: keyof WeightConfig, val: number) => void;
   totalWeight: number;
   isWeightValid: boolean;
-  onApplyPreset: (preset: WeightConfig) => void;
 }
 
 export function GradeStatsCards({
   averages,
   totalStudents,
   weights,
-  onWeightChange,
   totalWeight,
   isWeightValid,
-  onApplyPreset,
 }: GradeStatsCardsProps) {
   return (
     <div className="space-y-3">
@@ -51,7 +45,7 @@ export function GradeStatsCards({
         </div>
       )}
 
-      {/* 4 Stats Cards with Directly Editable Weights */}
+      {/* 4 Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Tugas */}
         <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs hover:shadow-xs transition-all flex flex-col justify-between">
@@ -62,32 +56,15 @@ export function GradeStatsCards({
                 Rata-rata Tugas
               </span>
             </div>
-
-            {/* Directly editable Bobot */}
-            <div className="flex items-center gap-1 bg-blue-50/90 border border-blue-200 px-2 py-0.5 rounded-lg">
-              <label htmlFor="bobot-tugas" className="text-[10px] font-bold text-blue-700">
-                Bobot
-              </label>
-              <input
-                id="bobot-tugas"
-                type="number"
-                min={0}
-                max={100}
-                value={weights.tugas}
-                onChange={(e) => onWeightChange("tugas", parseInt(e.target.value) || 0)}
-                className="w-10 px-1 py-0.2 text-center text-xs font-bold text-blue-800 bg-white border border-blue-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
-              />
-              <span className="text-[10px] font-bold text-blue-700">%</span>
-            </div>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+              {weights.tugas}%
+            </span>
           </div>
-
           <div className="flex items-baseline justify-between mt-1">
             <span className="text-2xl font-extrabold text-slate-900 tracking-tight">
               {averages.tugas}
             </span>
-            <span className="text-[10px] text-slate-400 font-medium">
-              Formatif berkala
-            </span>
+            <span className="text-[10px] text-slate-400 font-medium">Formatif berkala</span>
           </div>
         </div>
 
@@ -100,32 +77,15 @@ export function GradeStatsCards({
                 Rata-rata UTS
               </span>
             </div>
-
-            {/* Directly editable Bobot */}
-            <div className="flex items-center gap-1 bg-amber-50/90 border border-amber-200 px-2 py-0.5 rounded-lg">
-              <label htmlFor="bobot-uts" className="text-[10px] font-bold text-amber-700">
-                Bobot
-              </label>
-              <input
-                id="bobot-uts"
-                type="number"
-                min={0}
-                max={100}
-                value={weights.uts}
-                onChange={(e) => onWeightChange("uts", parseInt(e.target.value) || 0)}
-                className="w-10 px-1 py-0.2 text-center text-xs font-bold text-amber-800 bg-white border border-amber-300 rounded focus:ring-2 focus:ring-amber-500 outline-none"
-              />
-              <span className="text-[10px] font-bold text-amber-700">%</span>
-            </div>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+              {weights.uts}%
+            </span>
           </div>
-
           <div className="flex items-baseline justify-between mt-1">
             <span className="text-2xl font-extrabold text-slate-900 tracking-tight">
               {averages.uts}
             </span>
-            <span className="text-[10px] text-slate-400 font-medium">
-              Ujian Tengah Sem
-            </span>
+            <span className="text-[10px] text-slate-400 font-medium">Ujian Tengah Sem</span>
           </div>
         </div>
 
@@ -138,32 +98,15 @@ export function GradeStatsCards({
                 Rata-rata UAS
               </span>
             </div>
-
-            {/* Directly editable Bobot */}
-            <div className="flex items-center gap-1 bg-purple-50/90 border border-purple-200 px-2 py-0.5 rounded-lg">
-              <label htmlFor="bobot-uas" className="text-[10px] font-bold text-purple-700">
-                Bobot
-              </label>
-              <input
-                id="bobot-uas"
-                type="number"
-                min={0}
-                max={100}
-                value={weights.uas}
-                onChange={(e) => onWeightChange("uas", parseInt(e.target.value) || 0)}
-                className="w-10 px-1 py-0.2 text-center text-xs font-bold text-purple-800 bg-white border border-purple-300 rounded focus:ring-2 focus:ring-purple-500 outline-none"
-              />
-              <span className="text-[10px] font-bold text-purple-700">%</span>
-            </div>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+              {weights.uas}%
+            </span>
           </div>
-
           <div className="flex items-baseline justify-between mt-1">
             <span className="text-2xl font-extrabold text-slate-900 tracking-tight">
               {averages.uas}
             </span>
-            <span className="text-[10px] text-slate-400 font-medium">
-              Ujian Akhir Sem
-            </span>
+            <span className="text-[10px] text-slate-400 font-medium">Ujian Akhir Sem</span>
           </div>
         </div>
 
@@ -176,7 +119,6 @@ export function GradeStatsCards({
                 Rata-rata Kelas
               </span>
             </div>
-
             {/* Total Bobot indicator */}
             <span
               className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
@@ -207,36 +149,6 @@ export function GradeStatsCards({
               {totalStudents} Mhs
             </span>
           </div>
-        </div>
-      </div>
-
-      {/* Quick Presets Bar */}
-      <div className="flex items-center justify-between gap-2 flex-wrap px-3 py-2 bg-slate-100/70 border border-slate-200/80 rounded-xl text-xs">
-        <div className="flex items-center gap-1.5 text-slate-500 font-medium text-[11px]">
-          <Sliders className="w-3.5 h-3.5 text-slate-400" />
-          <span>Preset Bobot Cepat:</span>
-        </div>
-        <div className="flex items-center gap-1.5 flex-wrap">
-          {WEIGHT_PRESETS.map((preset) => {
-            const isMatch =
-              weights.tugas === preset.weights.tugas &&
-              weights.uts === preset.weights.uts &&
-              weights.uas === preset.weights.uas;
-            return (
-              <button
-                key={preset.label}
-                type="button"
-                onClick={() => onApplyPreset(preset.weights)}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
-                  isMatch
-                    ? "bg-blue-600 text-white shadow-2xs"
-                    : "bg-white text-slate-700 hover:bg-slate-200/80 border border-slate-200"
-                }`}
-              >
-                {preset.label}
-              </button>
-            );
-          })}
         </div>
       </div>
     </div>

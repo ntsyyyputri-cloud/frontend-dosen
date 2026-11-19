@@ -14,6 +14,7 @@ import {
   GradeFilterTabs,
   GradeTable,
   GradeAppealsModal,
+  WeightSettingsModal,
 } from "./components";
 
 export default function InputNilaiPage() {
@@ -48,6 +49,9 @@ export default function InputNilaiPage() {
 
   const [isAppealsOpen, setIsAppealsOpen] = useState(false);
   const [appeals, setAppeals] = useState<GradeAppeal[]>([]);
+
+  // Weight Settings Modal State
+  const [isWeightSettingsOpen, setIsWeightSettingsOpen] = useState(false);
 
   // Bulk Quick Fill State
   const [isQuickFillOpen, setIsQuickFillOpen] = useState(false);
@@ -123,17 +127,18 @@ export default function InputNilaiPage() {
               isSaving={isSaving}
               appealsCount={pendingAppealsCount}
               onOpenAppeals={() => setIsAppealsOpen(true)}
+              onOpenWeightSettings={() => setIsWeightSettingsOpen(true)}
+              isWeightValid={isWeightValid}
+              totalWeight={totalWeight}
             />
 
-            {/* Stats Cards with Directly Editable Weights */}
+            {/* Stats Cards (read-only weights display) */}
             <GradeStatsCards
               averages={averages}
               totalStudents={filteredStudents.length}
               weights={weights}
-              onWeightChange={handleWeightChange}
               totalWeight={totalWeight}
               isWeightValid={isWeightValid}
-              onApplyPreset={applyPresetWeights}
             />
 
             {/* Filter Tabs & Search */}
@@ -167,6 +172,17 @@ export default function InputNilaiPage() {
           onClose={() => setIsAppealsOpen(false)}
           appeals={appeals}
           onUpdateStatus={handleUpdateAppealStatus}
+        />
+
+        {/* Modal Pengaturan Bobot Nilai */}
+        <WeightSettingsModal
+          isOpen={isWeightSettingsOpen}
+          onClose={() => setIsWeightSettingsOpen(false)}
+          weights={weights}
+          onWeightChange={handleWeightChange}
+          totalWeight={totalWeight}
+          isWeightValid={isWeightValid}
+          onApplyPreset={applyPresetWeights}
         />
 
         {/* Modal Bulk Quick Fill */}

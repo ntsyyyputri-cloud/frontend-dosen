@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Save, MessageSquare, BookOpen, CheckCircle2 } from "lucide-react";
+import { Save, MessageSquare, BookOpen, CheckCircle2, Sliders, AlertTriangle } from "lucide-react";
 
 interface GradeClassHeaderProps {
   classes: any[];
@@ -11,6 +11,9 @@ interface GradeClassHeaderProps {
   isSaving: boolean;
   appealsCount?: number;
   onOpenAppeals?: () => void;
+  onOpenWeightSettings?: () => void;
+  isWeightValid?: boolean;
+  totalWeight?: number;
 }
 
 export function GradeClassHeader({
@@ -21,6 +24,9 @@ export function GradeClassHeader({
   isSaving,
   appealsCount = 0,
   onOpenAppeals,
+  onOpenWeightSettings,
+  isWeightValid = true,
+  totalWeight = 100,
 }: GradeClassHeaderProps) {
   const currentClass = classes.find((c) => c.id === activeClassId);
 
@@ -68,6 +74,26 @@ export function GradeClassHeader({
             )}
           </select>
         </div>
+
+        {/* Atur Bobot Nilai */}
+        <button
+          type="button"
+          onClick={onOpenWeightSettings}
+          className={`relative flex items-center gap-1.5 px-3.5 py-2 font-semibold rounded-xl transition-all shadow-2xs text-xs border ${
+            isWeightValid
+              ? "bg-slate-50 hover:bg-slate-100/80 text-slate-700 border-slate-200"
+              : "bg-rose-50 hover:bg-rose-100/80 text-rose-700 border-rose-200 animate-pulse"
+          }`}
+        >
+          <Sliders className={`w-3.5 h-3.5 ${isWeightValid ? "text-slate-500" : "text-rose-500"}`} />
+          <span>Atur Bobot</span>
+          {!isWeightValid && (
+            <span className="flex items-center gap-0.5 bg-rose-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold ml-0.5">
+              <AlertTriangle className="w-2.5 h-2.5" />
+              {totalWeight}%
+            </span>
+          )}
+        </button>
 
         {/* Koreksi Nilai Mahasiswa */}
         <button
