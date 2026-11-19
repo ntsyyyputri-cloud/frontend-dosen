@@ -28,10 +28,10 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return [
+      { source: "/dosen", destination: "/Dosen/dashboard" },
       { source: "/dosen/:path*", destination: "/Dosen/:path*" },
+      { source: "/admin", destination: "/Admin/dashboard" },
       { source: "/admin/:path*", destination: "/Admin/:path*" },
-      { source: "/dosen", destination: "/Dosen" },
-      { source: "/admin", destination: "/Admin" },
       { source: "/dashboard", destination: "/Dosen/dashboard" },
       { source: "/dashboard/export-laporan", destination: "/Dosen/cetakPDF" },
       { source: "/dashboard/input-nilai", destination: "/Dosen/inputnilai" },
