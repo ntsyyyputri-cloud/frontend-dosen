@@ -108,8 +108,8 @@ export function ObeProgressCard() {
           </div>
           <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1">
             <span className="text-amber-600 font-medium">Belum ada nilai tugas terunggah</span>
-            <Link href="/dosen/importnilai" className="text-blue-600 hover:underline font-medium">
-              Gunakan Import Excel
+            <Link href="/dosen/inputnilai" className="text-blue-600 hover:underline font-medium">
+              Input Nilai
             </Link>
           </div>
         </div>

@@ -1,7 +1,9 @@
 import { apiFetch } from "@/lib/api";
+import { WeightConfig } from "@/types/grade";
 
 export interface GradeItemPayload {
-  enrollment_id: number;
+  enrollment_id?: number;
+  id?: number;
   tugas: number | null;
   uts: number | null;
   uas: number | null;
@@ -13,19 +15,13 @@ export interface GradeItemPayload {
 
 export const gradeService = {
   async getGradesByClass(classId: number) {
-    return apiFetch<{ grades: any[] }>(`/grades/${classId}`);
+    return apiFetch<{ grades: any[]; weights?: WeightConfig }>(`/grades/${classId}`);
   },
 
-  async saveGrades(classId: number, grades: GradeItemPayload[]) {
-    return apiFetch<{ message: string }>(`/grades/${classId}`, {
-      method: "POST",
-      body: JSON.stringify({ grades }),
-    });
-  },
-
-  async lockGrades(classId: number) {
-    return apiFetch<{ message: string }>(`/grades/${classId}/lock`, {
+  async saveGrades(classId: number, grades: GradeItemPayload[], weights?: WeightConfig) {
+    return apiFetch<{ message: string; weights?: WeightConfig }>(`/grades/${classId}`, {
       method: "PUT",
+      body: JSON.stringify({ grades, weights }),
     });
   },
 
@@ -40,4 +36,3 @@ export const gradeService = {
     });
   },
 };
-

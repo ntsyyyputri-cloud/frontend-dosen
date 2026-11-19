@@ -64,11 +64,6 @@ export const DOSEN_MENU_GROUPS: MenuGroup[] = [
         href: "/dosen/inputnilai",
         icon: FileEdit,
       },
-      {
-        label: "Import Nilai & Generate AI",
-        href: "/dosen/importnilai",
-        icon: Sparkles,
-      },
     ],
   },
   {
