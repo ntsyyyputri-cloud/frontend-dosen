@@ -10,7 +10,6 @@ import { gradeService } from "@/services/gradeService";
 import { GradeAppeal, ScoreField } from "@/types/grade";
 import {
   GradeClassHeader,
-  GradeStatsCards,
   GradeFilterTabs,
   GradeTable,
   GradeAppealsModal,
@@ -130,15 +129,6 @@ export default function InputNilaiPage() {
               onOpenWeightSettings={() => setIsWeightSettingsOpen(true)}
               isWeightValid={isWeightValid}
               totalWeight={totalWeight}
-            />
-
-            {/* Stats Cards (read-only weights display) */}
-            <GradeStatsCards
-              averages={averages}
-              totalStudents={filteredStudents.length}
-              weights={weights}
-              totalWeight={totalWeight}
-              isWeightValid={isWeightValid}
             />
 
             {/* Filter Tabs & Search */}
