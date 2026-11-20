@@ -13,11 +13,17 @@ export function useLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const [formData, setFormData] = useState<LoginFormData>({
+  const [adminForm, setAdminForm] = useState<LoginFormData>({
     identifier: "",
     password: "",
     rememberMe: false,
   });
+  const [dosenForm, setDosenForm] = useState<LoginFormData>({
+    identifier: "",
+    password: "",
+    rememberMe: false,
+  });
+  const formData = roleMode === "admin" ? adminForm : dosenForm;
 
   // Deteksi query param ?role=admin atau ?role=dosen dari URL saat pertama kali dibuka
   useEffect(() => {
@@ -34,10 +40,15 @@ export function useLogin() {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
+    const update = (prev: LoginFormData) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
-    }));
+    });
+    if (roleMode === "admin") {
+      setAdminForm(update);
+    } else {
+      setDosenForm(update);
+    }
   };
 
   const handleRoleChange = (mode: RoleMode) => {

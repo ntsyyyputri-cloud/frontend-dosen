@@ -26,8 +26,11 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Proxy API requests to backend during development
   async rewrites() {
     return [
+      { source: "/api/:path*", destination: "http://localhost:5002/api/:path*" },
+      // UI route rewrites
       { source: "/Dosen/:path*", destination: "/dosen/:path*" },
       { source: "/Admin/:path*", destination: "/admin/:path*" },
       { source: "/dashboard", destination: "/dosen/dashboard" },
@@ -48,6 +51,7 @@ const nextConfig: NextConfig = {
       { source: "/keamanan", destination: "/dosen/keamanan" },
       { source: "/panduan", destination: "/dosen/dashboard" },
     ];
+
   },
 };
 
