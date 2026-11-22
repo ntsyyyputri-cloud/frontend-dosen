@@ -71,12 +71,12 @@ export function useLogin() {
         return;
       }
 
-      const res = await apiFetch("/auth/login", {
+      const endpoint = roleMode === "admin" ? "/auth/admin-login" : "/auth/login";
+      const res = await apiFetch(endpoint, {
         method: "POST",
         body: JSON.stringify({
           identifier: formData.identifier.trim(),
           password: formData.password,
-          role: roleMode,
         }),
       });
 

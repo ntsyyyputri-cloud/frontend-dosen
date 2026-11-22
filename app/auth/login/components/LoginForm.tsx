@@ -1,6 +1,6 @@
 "use client";
 
-import React, { type ChangeEvent, type FormEvent } from "react";
+import React, { useState, type ChangeEvent, type FormEvent } from "react";
 import {
   ArrowRight,
   Eye,
@@ -9,8 +9,10 @@ import {
   User,
   ShieldCheck,
   LogIn,
+  KeyRound,
 } from "lucide-react";
 import { RoleMode, LoginFormData } from "@/types/auth";
+import { ForgotPasswordCard } from "./ForgotPasswordCard";
 
 interface LoginFormProps {
   roleMode: RoleMode;
@@ -33,6 +35,8 @@ export function LoginForm({
   onTogglePassword,
   onSubmit,
 }: LoginFormProps) {
+  const [showForgot, setShowForgot] = useState(false);
+
   return (
     <div>
       {/* Error Alert */}
@@ -81,9 +85,9 @@ export function LoginForm({
             <label htmlFor="password" className="block text-xs font-semibold text-slate-700">
               Kata Sandi
             </label>
-            <span className="text-[11px] text-slate-400">
-              {roleMode === "admin" ? "Sistem Resmi Kampus" : "Lupa sandi? Hubungi Admin"}
-            </span>
+            {roleMode === "admin" && (
+              <span className="text-[11px] text-slate-400">Sistem Resmi Kampus</span>
+            )}
           </div>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -153,8 +157,27 @@ export function LoginForm({
               </>
             )}
           </button>
+
+          {/* Lupa Kata Sandi — hanya tampil untuk mode dosen */}
+          {roleMode === "dosen" && (
+            <div className="mt-3 text-center">
+              <button
+                type="button"
+                onClick={() => setShowForgot(true)}
+                className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-[#4F46E5] transition-colors"
+              >
+                <KeyRound className="w-3.5 h-3.5" />
+                <span>Lupa kata sandi?</span>
+              </button>
+            </div>
+          )}
         </div>
       </form>
+
+      {/* Modal / Card Lupa Kata Sandi */}
+      {showForgot && (
+        <ForgotPasswordCard onClose={() => setShowForgot(false)} />
+      )}
     </div>
   );
 }
