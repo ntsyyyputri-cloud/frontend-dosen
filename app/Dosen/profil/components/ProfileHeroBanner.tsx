@@ -27,21 +27,21 @@ export function ProfileHeroBanner({ formData }: ProfileHeroBannerProps) {
             </span>
           </div>
 
-          <p className="text-slate-500 text-xs">
+          <p className="text-slate-500 text-xs select-text">
             NIDN: <strong className="text-slate-800">{formData.nidn}</strong> • Program Studi S1 Informatika • Fakultas Ilmu Komputer
           </p>
 
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-slate-600 pt-1">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-slate-600 pt-1 select-text">
             <div className="flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5 text-slate-400" />
+              <Mail className="w-3.5 h-3.5 text-slate-400 select-none" />
               <span>{formData.emailResmi}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <Phone className="w-3.5 h-3.5 text-slate-400" />
+              <Phone className="w-3.5 h-3.5 text-slate-400 select-none" />
               <span>{formData.nomorHp}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-slate-400" />
+              <MapPin className="w-3.5 h-3.5 text-slate-400 select-none" />
               <span>{formData.ruangKerja}</span>
             </div>
           </div>

@@ -134,8 +134,8 @@ export function GradeTable({
                           {s.avatar}
                         </div>
                         <div>
-                          <p className="font-bold text-slate-900 text-xs leading-tight">{s.name}</p>
-                          <p className="text-[11px] text-slate-400 font-mono">NIM: {s.nim}</p>
+                          <p className="font-bold text-slate-900 text-xs leading-tight select-text">{s.name}</p>
+                          <p className="text-[11px] text-slate-400 font-mono select-text">NIM: {s.nim}</p>
                         </div>
                       </div>
                     </td>

@@ -89,10 +89,10 @@ export function GradeAppealsModal({
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-xs text-slate-800">
+                        <span className="font-bold text-xs text-slate-800 select-text">
                           {appeal.student_name || "Mahasiswa"}
                         </span>
-                        <span className="text-[11px] font-mono text-slate-500">
+                        <span className="text-[11px] font-mono text-slate-500 select-text">
                           ({appeal.student_nim || `ID: ${appeal.student_id}`})
                         </span>
                         <span
@@ -139,8 +139,8 @@ export function GradeAppealsModal({
                   </div>
 
                   {/* Komentar Mahasiswa */}
-                  <div className="mt-3 p-3 bg-white rounded-lg border border-slate-200/80 text-xs text-slate-700 leading-relaxed shadow-2xs">
-                    <div className="text-[10px] font-bold uppercase text-slate-400 mb-1">
+                  <div className="mt-3 p-3 bg-white rounded-lg border border-slate-200/80 text-xs text-slate-700 leading-relaxed shadow-2xs select-text">
+                    <div className="text-[10px] font-bold uppercase text-slate-400 mb-1 select-none">
                       Komentar / Sanggahan Mahasiswa:
                     </div>
                     &ldquo;{appeal.comment}&rdquo;
@@ -148,8 +148,8 @@ export function GradeAppealsModal({
 
                   {/* Tanggapan Dosen (jika ada) */}
                   {appeal.lecturer_response && (
-                    <div className="mt-2 p-2.5 bg-slate-100/70 rounded-lg text-[11px] text-slate-600 border border-slate-200/50">
-                      <span className="font-semibold text-slate-700">Tanggapan Dosen: </span>
+                    <div className="mt-2 p-2.5 bg-slate-100/70 rounded-lg text-[11px] text-slate-600 border border-slate-200/50 select-text">
+                      <span className="font-semibold text-slate-700 select-none">Tanggapan Dosen: </span>
                       {appeal.lecturer_response}
                     </div>
                   )}

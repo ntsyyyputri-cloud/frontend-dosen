@@ -51,8 +51,8 @@ export function StudentTable({
                         {std.name[0] || "M"}
                       </div>
                       <div>
-                        <p className="font-bold text-slate-900 text-xs">{std.name}</p>
-                        <p className="text-[10px] text-emerald-600 font-semibold mt-0.5">
+                        <p className="font-bold text-slate-900 text-xs select-text">{std.name}</p>
+                        <p className="text-[10px] text-emerald-600 font-semibold mt-0.5 select-text">
                           NIM: {std.nim} • {std.email}
                         </p>
                       </div>

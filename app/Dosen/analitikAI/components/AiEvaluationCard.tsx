@@ -68,7 +68,7 @@ export function AiEvaluationCard({
             <Star className="w-4 h-4 text-emerald-600" />
             <span>Kekuatan & Capaian Unggul</span>
           </div>
-          <p className="text-slate-700 text-xs leading-relaxed">{analysis.strength}</p>
+          <p className="text-slate-700 text-xs leading-relaxed select-text">{analysis.strength}</p>
         </div>
 
         <div className="bg-amber-50/60 border border-amber-100 rounded-2xl p-5 space-y-2">
@@ -76,7 +76,7 @@ export function AiEvaluationCard({
             <Flag className="w-4 h-4 text-amber-600" />
             <span>Aspek Yang Perlu Ditingkatkan</span>
           </div>
-          <p className="text-slate-700 text-xs leading-relaxed">{analysis.improvement}</p>
+          <p className="text-slate-700 text-xs leading-relaxed select-text">{analysis.improvement}</p>
         </div>
 
         <div className="bg-indigo-50/60 border border-indigo-100 rounded-2xl p-5 space-y-2">
@@ -84,7 +84,7 @@ export function AiEvaluationCard({
             <Award className="w-4 h-4 text-indigo-600" />
             <span>Rekomendasi Tindak Lanjut</span>
           </div>
-          <p className="text-slate-700 text-xs leading-relaxed">{analysis.recommendation}</p>
+          <p className="text-slate-700 text-xs leading-relaxed select-text">{analysis.recommendation}</p>
         </div>
       </div>
     </div>

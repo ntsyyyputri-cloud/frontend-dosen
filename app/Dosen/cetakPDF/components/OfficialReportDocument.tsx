@@ -20,7 +20,7 @@ export function OfficialReportDocument({
   isLoading,
 }: OfficialReportDocumentProps) {
   return (
-    <div className="bg-white p-8 md:p-12 rounded-2xl border border-slate-200 shadow-sm print:shadow-none print:border-none print:p-0 print:m-0 space-y-6">
+    <div className="bg-white p-8 md:p-12 rounded-2xl border border-slate-200 shadow-sm print:shadow-none print:border-none print:p-0 print:m-0 space-y-6 select-text">
       {/* KOP SURAT RESMI UNIVERSITAS */}
       <div className="border-b-2 border-slate-900 pb-4 flex items-center justify-between gap-4">
         <div className="w-16 h-16 shrink-0 relative">
