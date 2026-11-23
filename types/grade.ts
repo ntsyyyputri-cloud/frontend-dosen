@@ -31,3 +31,20 @@ export interface WeightConfig {
   uas: number;
 }
 
+export interface GradeAppeal {
+  id: number;
+  student_id: number;
+  class_id?: number | null;
+  question_title: string;
+  current_score: string;
+  comment: string;
+  status: "pending" | "approved" | "rejected";
+  lecturer_response?: string | null;
+  created_at: string;
+  updated_at: string;
+  student_name?: string;
+  student_nim?: string;
+  class_code?: string;
+  class_title?: string;
+}
+

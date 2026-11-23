@@ -13,6 +13,7 @@ interface ClassSearchBarProps {
   onSemesterChange: (val: string) => void;
   filteredCount: number;
   totalCount: number;
+  prodiOptions?: string[];
 }
 
 export function ClassSearchBar({
@@ -24,7 +25,10 @@ export function ClassSearchBar({
   onSemesterChange,
   filteredCount,
   totalCount,
+  prodiOptions,
 }: ClassSearchBarProps) {
+  const options = prodiOptions && prodiOptions.length > 0 ? prodiOptions : CLASS_PRODI_OPTIONS;
+
   return (
     <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col lg:flex-row items-center justify-between gap-3">
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto flex-1">
@@ -47,7 +51,7 @@ export function ClassSearchBar({
             onChange={(e) => onProdiChange(e.target.value)}
             className="w-full sm:w-auto px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition-all"
           >
-            {CLASS_PRODI_OPTIONS.map((p) => (
+            {options.map((p) => (
               <option key={p} value={p}>
                 {p}
               </option>

@@ -1,7 +1,9 @@
 import { apiFetch } from "@/lib/api";
+import { WeightConfig } from "@/types/grade";
 
 export interface GradeItemPayload {
-  enrollment_id: number;
+  enrollment_id?: number;
+  id?: number;
   tugas: number | null;
   uts: number | null;
   uas: number | null;
@@ -13,20 +15,24 @@ export interface GradeItemPayload {
 
 export const gradeService = {
   async getGradesByClass(classId: number) {
-    return apiFetch<{ grades: any[] }>(`/grades/${classId}`);
+    return apiFetch<{ grades: any[]; weights?: WeightConfig }>(`/grades/${classId}`);
   },
 
-  async saveGrades(classId: number, grades: GradeItemPayload[]) {
-    return apiFetch<{ message: string }>(`/grades/${classId}`, {
-      method: "POST",
-      body: JSON.stringify({ grades }),
+  async saveGrades(classId: number, grades: GradeItemPayload[], weights?: WeightConfig) {
+    return apiFetch<{ message: string; weights?: WeightConfig }>(`/grades/${classId}`, {
+      method: "PUT",
+      body: JSON.stringify({ grades, weights }),
     });
   },
 
-  async lockGrades(classId: number) {
-    return apiFetch<{ message: string }>(`/grades/${classId}/lock`, {
-      method: "PUT",
+  async getAppealsByClass(classId: number) {
+    return apiFetch<{ appeals: any[] }>(`/grades/${classId}/appeals`);
+  },
+
+  async updateAppeal(appealId: number, status: "approved" | "rejected" | "pending", response?: string) {
+    return apiFetch<{ message: string; appeal: any }>(`/grades/appeals/${appealId}`, {
+      method: "PATCH",
+      body: JSON.stringify({ status, lecturer_response: response }),
     });
   },
 };
-

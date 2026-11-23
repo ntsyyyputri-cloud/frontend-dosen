@@ -18,7 +18,7 @@ export function LoginFooter({ roleMode }: LoginFooterProps) {
         </p>
       </div>
       <p className="mt-6 text-xs text-slate-400 text-center">
-        © 2024–2025 Gradia Academic Intelligence System
+        © 2025–2026 Gradia Academic Intelligence System
       </p>
     </>
   );

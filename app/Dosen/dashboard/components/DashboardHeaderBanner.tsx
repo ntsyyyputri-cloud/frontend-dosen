@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Download, FileEdit, Sparkles } from "lucide-react";
+import { Download, FileEdit } from "lucide-react";
 
 export function DashboardHeaderBanner() {
   return (
@@ -39,15 +39,6 @@ export function DashboardHeaderBanner() {
         >
           <FileEdit className="w-3.5 h-3.5" />
           <span>Input Nilai Rekap</span>
-        </Link>
-
-        {/* Tombol Import & Generate AI */}
-        <Link
-          href="/dosen/importnilai"
-          className="flex items-center gap-1.5 px-3 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-all shadow-xs"
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Import & Generate AI</span>
         </Link>
       </div>
     </div>

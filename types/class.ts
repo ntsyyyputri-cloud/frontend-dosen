@@ -48,10 +48,10 @@ export interface ClassFormData {
 
 export const CLASS_PRODI_OPTIONS = [
   "Semua Prodi",
-  "S1 Informatika",
-  "S1 Sistem Informasi",
-  "S1 Teknologi Informasi",
-  "D3 Manajemen Informatika",
+  "Teknik Informatika",
+  "Sistem Informasi",
+  "Teknologi Informasi",
+  "Manajemen Informatika",
 ];
 
 export const ACADEMIC_YEAR_OPTIONS = [

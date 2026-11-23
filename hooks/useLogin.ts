@@ -35,6 +35,16 @@ export function useLogin() {
       } else if (roleParam === "dosen") {
         setRoleMode("dosen");
       }
+
+      if (params.get("expired") === "1") {
+        setErrorMsg("Sesi Anda telah berakhir atau token kedaluwarsa. Silakan login kembali.");
+      } else if (params.get("error") === "unauthorized_role") {
+        if (roleParam === "admin") {
+          setErrorMsg("Akses ditolak. Dashboard Administrator hanya dapat diakses oleh akun Administrator. Akun Dosen tidak memiliki hak akses.");
+        } else {
+          setErrorMsg("Akses ditolak. Dashboard hanya dapat diakses oleh akun dengan hak akses yang sesuai.");
+        }
+      }
     }
   }, []);
 
@@ -72,7 +82,8 @@ export function useLogin() {
         return;
       }
 
-      const res = await apiFetch("/auth/login", {
+      const endpoint = roleMode === "admin" ? "/auth/admin-login" : "/auth/login";
+      const res = await apiFetch(endpoint, {
         method: "POST",
         body: JSON.stringify({
           identifier: formData.identifier.trim(),
@@ -83,7 +94,37 @@ export function useLogin() {
       const rawRole = (res.role || "dosen").toLowerCase();
       const detectedRole = (rawRole === "admin" || rawRole === "superadmin") ? "admin" : rawRole;
 
-      // Simpan autentikasi ke localStorage & cookie
+      // VALIDASI HAK AKSES PER ROLE:
+      // Pada login admin, hanya akun admin yang boleh login ke dashboard admin.
+      // Jika akun dosen login ke admin, akan terjadi error!
+      if (roleMode === "admin" && detectedRole !== "admin") {
+        localStorage.removeItem("gradia_token");
+        localStorage.removeItem("gradia_role");
+        localStorage.removeItem("gradia_admin");
+        localStorage.removeItem("gradia_lecturer");
+        document.cookie = "gradia_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        document.cookie = "gradia_role=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+
+        setErrorMsg("Akses ditolak. Akun Anda terdaftar sebagai Dosen. Hanya akun Administrator yang berhak login ke Dashboard Admin.");
+        setIsLoading(false);
+        return;
+      }
+
+      // Pada login dosen, hanya akun dosen yang boleh login
+      if (roleMode === "dosen" && detectedRole !== "dosen") {
+        localStorage.removeItem("gradia_token");
+        localStorage.removeItem("gradia_role");
+        localStorage.removeItem("gradia_admin");
+        localStorage.removeItem("gradia_lecturer");
+        document.cookie = "gradia_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+        document.cookie = "gradia_role=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+
+        setErrorMsg("Akses ditolak. Akun Anda terdaftar sebagai Administrator. Silakan login melalui tab Admin.");
+        setIsLoading(false);
+        return;
+      }
+
+      // Simpan autentikasi ke localStorage & cookie jika role valid
       localStorage.setItem("gradia_token", res.token);
       localStorage.setItem("gradia_role", detectedRole);
 

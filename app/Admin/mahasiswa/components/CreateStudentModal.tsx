@@ -3,6 +3,7 @@
 import React from "react";
 import { UserPlus, X, AlertCircle, RefreshCw, CheckCircle2 } from "lucide-react";
 import { StudentFormData } from "@/types/student";
+import { PRODI_LIST } from "@/constants/prodi";
 
 interface CreateStudentModalProps {
   isOpen: boolean;
@@ -13,6 +14,7 @@ interface CreateStudentModalProps {
   formDispatch: (payload: FormData) => void;
   isPending: boolean;
   getFieldError: (fieldName: string) => string | undefined;
+  prodiOptions?: string[];
 }
 
 export function CreateStudentModal({
@@ -24,8 +26,14 @@ export function CreateStudentModal({
   formDispatch,
   isPending,
   getFieldError,
+  prodiOptions,
 }: CreateStudentModalProps) {
   if (!isOpen) return null;
+
+  const availableProdi =
+    prodiOptions && prodiOptions.length > 0
+      ? prodiOptions.filter((p) => p !== "Semua Prodi")
+      : PRODI_LIST;
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
@@ -133,10 +141,11 @@ export function CreateStudentModal({
                 onChange={(e) => setFormData({ ...formData, prodi: e.target.value })}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
               >
-                <option value="S1 Informatika">S1 Informatika</option>
-                <option value="S1 Sistem Informasi">S1 Sistem Informasi</option>
-                <option value="S1 Teknologi Informasi">S1 Teknologi Informasi</option>
-                <option value="D3 Manajemen Informatika">D3 Manajemen Informatika</option>
+                {availableProdi.map((p) => (
+                  <option key={p} value={p}>
+                    {p}
+                  </option>
+                ))}
               </select>
             </div>
 
