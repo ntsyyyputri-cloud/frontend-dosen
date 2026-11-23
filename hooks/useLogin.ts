@@ -88,6 +88,7 @@ export function useLogin() {
         body: JSON.stringify({
           identifier: formData.identifier.trim(),
           password: formData.password,
+          role: roleMode,
         }),
       });
 

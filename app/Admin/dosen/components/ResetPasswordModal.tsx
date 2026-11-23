@@ -56,15 +56,16 @@ export function ResetPasswordModal({
               Kata Sandi Baru *
             </label>
             <input
-              type="text"
+              type="password"
               value={resetPasswordVal}
               onChange={(e) => onPasswordChange(e.target.value)}
-              placeholder="Masukkan kata sandi baru"
+              placeholder="Masukkan kata sandi baru (min. 6 karakter)"
               className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:bg-white transition"
               required
+              minLength={6}
             />
             <span className="text-[10px] text-slate-400 block mt-1">
-              Default yang disarankan: <strong>password123</strong>
+              Masukkan kata sandi baru minimal 6 karakter.
             </span>
           </div>
 

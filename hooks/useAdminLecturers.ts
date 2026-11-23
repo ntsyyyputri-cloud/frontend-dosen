@@ -28,7 +28,7 @@ export function useAdminLecturers() {
   // Quick Login / Impersonate & Reset Password State
   const [impersonatingId, setImpersonatingId] = useState<number | null>(null);
   const [resetTarget, setResetTarget] = useState<LecturerData | null>(null);
-  const [resetPasswordVal, setResetPasswordVal] = useState("password123");
+  const [resetPasswordVal, setResetPasswordVal] = useState("");
   const [isResetting, setIsResetting] = useState(false);
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
@@ -141,18 +141,25 @@ export function useAdminLecturers() {
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!resetTarget) return;
+    if (!resetPasswordVal || resetPasswordVal.length < 6) {
+      setNotification({
+        type: "error",
+        message: "Kata sandi baru minimal 6 karakter.",
+      });
+      return;
+    }
     setIsResetting(true);
     try {
       const res = await apiFetch(`/admin/lecturers/${resetTarget.id}/reset-password`, {
         method: "PUT",
-        body: JSON.stringify({ password: resetPasswordVal || "password123" }),
+        body: JSON.stringify({ password: resetPasswordVal }),
       });
       setNotification({
         type: "success",
-        message: res.message || `Kata sandi dosen ${resetTarget.name} berhasil direset menjadi "${resetPasswordVal || "password123"}".`,
+        message: res.message || `Kata sandi akun dosen ${resetTarget.name} berhasil direset.`,
       });
       setResetTarget(null);
-      setResetPasswordVal("password123");
+      setResetPasswordVal("");
     } catch (err: any) {
       setNotification({
         type: "error",

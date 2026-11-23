@@ -21,6 +21,10 @@ export function useAdminStudents() {
   const [isLoading, setIsLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<StudentData | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [resetTarget, setResetTarget] = useState<StudentData | null>(null);
+  const [resetPasswordVal, setResetPasswordVal] = useState("");
+  const [isResetting, setIsResetting] = useState(false);
+  const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [formData, setFormData] = useState<StudentFormData>(INITIAL_FORM);
 
   // Server Action untuk Tambah Mahasiswa
@@ -73,6 +77,39 @@ export function useAdminStudents() {
       alert("Gagal menghapus mahasiswa: " + err.message);
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  // Reset Kata Sandi Mahasiswa
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!resetTarget) return;
+    if (!resetPasswordVal || resetPasswordVal.length < 6) {
+      setNotification({
+        type: "error",
+        message: "Kata sandi baru minimal 6 karakter.",
+      });
+      return;
+    }
+    setIsResetting(true);
+    try {
+      const res = await apiFetch(`/admin/students/${resetTarget.id}/reset-password`, {
+        method: "PUT",
+        body: JSON.stringify({ password: resetPasswordVal }),
+      });
+      setNotification({
+        type: "success",
+        message: res.message || `Kata sandi mahasiswa ${resetTarget.name} berhasil direset.`,
+      });
+      setResetTarget(null);
+      setResetPasswordVal("");
+    } catch (err: any) {
+      setNotification({
+        type: "error",
+        message: "Gagal mereset kata sandi: " + err.message,
+      });
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -138,6 +175,14 @@ export function useAdminStudents() {
     getFieldError,
     fetchStudents,
     handleDeleteStudent,
+    resetTarget,
+    setResetTarget,
+    resetPasswordVal,
+    setResetPasswordVal,
+    isResetting,
+    handleResetPassword,
+    notification,
+    setNotification,
   };
 }
 

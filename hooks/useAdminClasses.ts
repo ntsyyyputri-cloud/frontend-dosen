@@ -66,7 +66,18 @@ export function useAdminClasses() {
     setIsLoading(true);
     try {
       const res = await apiFetch("/admin/classes");
-      if (res.classes) setClasses(res.classes);
+      if (res.classes) {
+        const formatted = res.classes.map((c: any) => {
+          const prefix = c.lecturer_title_prefix ? `${c.lecturer_title_prefix.trim()} ` : "";
+          const suffix = c.lecturer_title_suffix ? `, ${c.lecturer_title_suffix.trim()}` : "";
+          const computedFullName = `${prefix}${c.lecturer_name || ""}${suffix}`.trim() || c.lecturer_name || "";
+          return {
+            ...c,
+            lecturerFullName: c.lecturerFullName || computedFullName,
+          };
+        });
+        setClasses(formatted);
+      }
     } catch (err: any) {
       console.warn("Gagal mengambil data kelas kampus:", err.message);
     } finally {
@@ -247,11 +258,13 @@ export function useAdminClasses() {
 
   // Filter kelas kampus
   const filteredClasses = classes.filter((c) => {
-    const q = searchQuery.toLowerCase();
+    const q = searchQuery.toLowerCase().trim();
     const matchesSearch =
+      !q ||
       c.title.toLowerCase().includes(q) ||
       c.code.toLowerCase().includes(q) ||
       (c.lecturerFullName && c.lecturerFullName.toLowerCase().includes(q)) ||
+      (c.lecturer_name && c.lecturer_name.toLowerCase().includes(q)) ||
       (c.lecturer_nidn && c.lecturer_nidn.toLowerCase().includes(q));
 
     const normSelected = selectedProdi.trim().toLowerCase();

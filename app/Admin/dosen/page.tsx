@@ -102,11 +102,11 @@ export default function AdminDosenPage() {
               isLoading={isLoading}
               onOpenResetPassword={(lec) => {
                 setResetTarget(lec);
-                setResetPasswordVal("password123");
+                setResetPasswordVal("");
               }}
               onOpenDeleteConfirm={(lec) => setDeleteTarget(lec)}
               onViewClasses={(lec) => {
-                router.push(`/admin/kelas?search=${encodeURIComponent(lec.name)}`);
+                router.push(`/admin/kelas?search=${encodeURIComponent(lec.nidn || lec.fullName || lec.name)}`);
               }}
             />
           </div>
