@@ -13,12 +13,7 @@ export function LecturerCredentialsNotice() {
             Seluruh data dosen di bawah ini siap digunakan untuk login ke Portal Dosen (/auth/login)
           </p>
           <p className="text-[11px] text-slate-500 mt-0.5">
-            Kata sandi bawaan seluruh akun dosen adalah:{" "}
-            <code className="bg-white px-1.5 py-0.5 rounded border border-indigo-200 font-bold text-indigo-700">
-              password123
-            </code>
-            . Anda juga dapat menggunakan tombol{" "}
-            <strong className="text-indigo-600 font-bold">Login Cepat</strong> di bawah untuk langsung membuka Dashboard Dosen dengan satu klik tanpa memasukkan kata sandi.
+            Admin dapat mengatur atau mereset kata sandi akun dosen melalui tombol aksi di tabel. Kata sandi yang tersimpan dienkripsi secara aman dan tidak ditampilkan kembali ke antarmuka demi menjaga kerahasiaan akun.
           </p>
         </div>
       </div>
