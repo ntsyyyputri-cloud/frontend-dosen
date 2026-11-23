@@ -94,6 +94,7 @@ aside {
 
 /* Mode Cetak / Laporan Berita Acara: semua teks dapat diseleksi */
 @media print {
+
   *,
   body {
     -webkit-user-select: text !important;
