@@ -47,13 +47,15 @@ export function CreateEditClassModal({
           <h3 className="text-base font-bold text-slate-900">
             {editingClass ? "Edit Data Kelas" : "Tambah Kelas Perkuliahan Baru"}
           </h3>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          {!editingClass && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-slate-400 hover:text-slate-600 p-1"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
         </div>
 
         <form onSubmit={onSubmit} className="space-y-4">

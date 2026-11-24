@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5002/api";
 
 export async function apiFetch<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const token = typeof window !== "undefined" ? localStorage.getItem("gradia_token") : null;
@@ -15,7 +15,9 @@ export async function apiFetch<T = any>(endpoint: string, options: RequestInit =
   });
 
   // Strict Interceptor: Jika server menolak token (401 Unauthorized / 403 Forbidden)
-  if (response.status === 401 || response.status === 403) {
+  // Khusus endpoint /auth/* (login), jangan redirect — biarkan error ditangani oleh handler login
+  const isAuthEndpoint = endpoint.startsWith("/auth/");
+  if ((response.status === 401 || response.status === 403) && !isAuthEndpoint) {
     if (typeof window !== "undefined") {
       localStorage.removeItem("gradia_token");
       localStorage.removeItem("gradia_role");

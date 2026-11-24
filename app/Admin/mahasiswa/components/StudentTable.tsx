@@ -1,18 +1,20 @@
 "use client";
 
 import React from "react";
-import { RefreshCw, BookOpen, Trash2 } from "lucide-react";
+import { RefreshCw, BookOpen, KeyRound, Trash2 } from "lucide-react";
 import { StudentData } from "@/types/student";
 
 interface StudentTableProps {
   students: StudentData[];
   isLoading: boolean;
+  onOpenResetPassword: (std: StudentData) => void;
   onOpenDeleteConfirm: (std: StudentData) => void;
 }
 
 export function StudentTable({
   students,
   isLoading,
+  onOpenResetPassword,
   onOpenDeleteConfirm,
 }: StudentTableProps) {
   return (
@@ -75,18 +77,28 @@ export function StudentTable({
                   <td className="py-3.5 px-4 text-center">
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 font-semibold text-[11px]">
                       <BookOpen className="w-3 h-3 text-slate-400" />
-                      <span>{std.enrolled_classes_count || 0} Mata Kuliah</span>
+                      <span>{std.enrolled_classes_count ?? (std as any).class_count ?? 0} Mata Kuliah</span>
                     </span>
                   </td>
                   <td className="py-3.5 px-4 text-right">
-                    <button
-                      type="button"
-                      onClick={() => onOpenDeleteConfirm(std)}
-                      className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 hover:text-rose-700 transition-colors"
-                      title="Hapus Data Mahasiswa"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center justify-end gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => onOpenResetPassword(std)}
+                        className="p-1.5 rounded-lg text-amber-600 hover:bg-amber-50 hover:text-amber-700 transition-colors"
+                        title="Reset Kata Sandi Mahasiswa"
+                      >
+                        <KeyRound className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onOpenDeleteConfirm(std)}
+                        className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 hover:text-rose-700 transition-colors"
+                        title="Hapus Data Mahasiswa"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))

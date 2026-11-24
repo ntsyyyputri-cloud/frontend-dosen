@@ -84,18 +84,11 @@ export function useAdminStudents() {
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!resetTarget) return;
-    if (!resetPasswordVal || resetPasswordVal.length < 6) {
-      setNotification({
-        type: "error",
-        message: "Kata sandi baru minimal 6 karakter.",
-      });
-      return;
-    }
     setIsResetting(true);
     try {
       const res = await apiFetch(`/admin/students/${resetTarget.id}/reset-password`, {
         method: "PUT",
-        body: JSON.stringify({ password: resetPasswordVal }),
+        body: JSON.stringify({}),
       });
       setNotification({
         type: "success",

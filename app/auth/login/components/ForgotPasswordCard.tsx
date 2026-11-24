@@ -12,6 +12,7 @@ import {
   ExternalLink,
   AlertCircle,
 } from "lucide-react";
+import { apiFetch } from "@/lib/api";
 
 interface ForgotPasswordCardProps {
   onClose: () => void;
@@ -19,16 +20,17 @@ interface ForgotPasswordCardProps {
 
 export function ForgotPasswordCard({ onClose }: ForgotPasswordCardProps) {
   const [email, setEmail] = useState("");
+  const [sentEmail, setSentEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Notifikasi error otomatis hilang setelah 3 detik
+  // Notifikasi error otomatis hilang setelah 5 detik
   useEffect(() => {
     if (!error) return;
     const timer = setTimeout(() => {
       setError("");
-    }, 3000);
+    }, 5000);
     return () => clearTimeout(timer);
   }, [error]);
 
@@ -42,10 +44,21 @@ export function ForgotPasswordCard({ onClose }: ForgotPasswordCardProps) {
     }
 
     setLoading(true);
-    // TODO: ganti dengan apiFetch ke endpoint /auth/forgot-password
-    await new Promise((r) => setTimeout(r, 1500));
-    setLoading(false);
-    setSent(true);
+    try {
+      const res = await apiFetch<{ message?: string; email?: string }>(
+        "/auth/forgot-password",
+        {
+          method: "POST",
+          body: JSON.stringify({ identifier: email.trim() }),
+        }
+      );
+      setSentEmail(res.email || email.trim());
+      setSent(true);
+    } catch (err: any) {
+      setError(err?.message || "Gagal mengirim tautan reset kata sandi.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getMailUrl = (targetEmail: string) => {
@@ -102,15 +115,15 @@ export function ForgotPasswordCard({ onClose }: ForgotPasswordCardProps) {
             </h2>
             <p className="text-xs text-slate-500 leading-relaxed">
               Silakan periksa kotak masuk email kampus Anda
-              {email.trim() ? (
-                <> (<span className="font-semibold text-slate-700">{email}</span>)</>
+              {sentEmail ? (
+                <> (<span className="font-semibold text-slate-700">{sentEmail}</span>)</>
               ) : null}
               . Jika tidak menerima email dalam beberapa menit, hubungi Administrator.
             </p>
 
             {/* Tombol Biru: Buka Email */}
             <a
-              href={getMailUrl(email)}
+              href={getMailUrl(sentEmail || email)}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-3 w-full py-3 bg-[#4F46E5] hover:bg-[#4338CA] text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"

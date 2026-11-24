@@ -8,13 +8,14 @@ import {
   ClassStudentItem,
   ClassFormData,
   CLASS_PRODI_OPTIONS,
+  normalizeClassProdi,
 } from "@/types/class";
 
 const INITIAL_FORM: ClassFormData = {
   code: "",
   title: "",
   sks: 3,
-  prodi: "Teknik Informatika",
+  prodi: "S1 Teknik Informatika",
   semester: 1,
   academic_year: "2024/2025 Ganjil",
   capacity: 40,
@@ -123,7 +124,7 @@ export function useAdminClasses() {
       code: c.code,
       title: c.title,
       sks: c.sks,
-      prodi: c.prodi,
+      prodi: normalizeClassProdi(c.prodi) || "S1 Teknik Informatika",
       semester: c.semester,
       academic_year: c.academic_year || "2024/2025 Ganjil",
       capacity: c.capacity,
@@ -157,6 +158,7 @@ export function useAdminClasses() {
         notify("Kelas baru berhasil dibuat dan ditambahkan!");
       }
       setShowCreateModal(false);
+      setEditingClass(null);
       fetchCampusClasses();
     } catch (err: any) {
       notify("Gagal menyimpan kelas: " + err.message, "error");
@@ -198,7 +200,17 @@ export function useAdminClasses() {
     e.preventDefault();
     if (!managingClass) return;
 
+    const maxCapacity = Number(managingClass.capacity) || 0;
+    if (maxCapacity > 0 && classStudents.length >= maxCapacity) {
+      notify(
+        `Kapasitas kelas sudah penuh (${classStudents.length}/${maxCapacity} mahasiswa).`,
+        "error"
+      );
+      return;
+    }
+
     try {
+      const isAddingNew = Boolean(!selectedMasterStudentId && newNim && newName);
       if (selectedMasterStudentId) {
         await apiFetch(`/admin/classes/${managingClass.id}/students`, {
           method: "POST",
@@ -210,7 +222,7 @@ export function useAdminClasses() {
           body: JSON.stringify({
             nim: newNim,
             name: newName,
-            prodi: managingClass.prodi,
+            prodi: normalizeClassProdi(managingClass.prodi) || managingClass.prodi,
           }),
         });
       } else {
@@ -226,6 +238,9 @@ export function useAdminClasses() {
       const res = await apiFetch(`/admin/classes/${managingClass.id}/students`);
       if (res.students) setClassStudents(res.students);
       fetchCampusClasses();
+      if (isAddingNew) {
+        fetchLecturersAndStudents();
+      }
     } catch (err: any) {
       notify("Gagal mendaftarkan mahasiswa: " + err.message, "error");
     }
@@ -251,8 +266,8 @@ export function useAdminClasses() {
     new Set([
       "Semua Prodi",
       ...CLASS_PRODI_OPTIONS.filter((p) => p !== "Semua Prodi"),
-      ...classes.map((c) => c.prodi?.trim()).filter(Boolean),
-      ...masterStudents.map((s) => s.prodi?.trim()).filter(Boolean),
+      ...classes.map((c) => normalizeClassProdi(c.prodi)).filter(Boolean),
+      ...masterStudents.map((s) => normalizeClassProdi(s.prodi)).filter(Boolean),
     ])
   );
 
@@ -267,26 +282,20 @@ export function useAdminClasses() {
       (c.lecturer_name && c.lecturer_name.toLowerCase().includes(q)) ||
       (c.lecturer_nidn && c.lecturer_nidn.toLowerCase().includes(q));
 
-    const normSelected = selectedProdi.trim().toLowerCase();
-    const normClassProdi = (c.prodi || "").trim().toLowerCase();
+    const normSelected = normalizeClassProdi(selectedProdi).toLowerCase();
+    const normClassProdi = normalizeClassProdi(c.prodi).toLowerCase();
 
     const matchesProdi =
       selectedProdi === "Semua Prodi" ||
       normClassProdi === normSelected ||
-      (normSelected === "teknik informatika" &&
-        (normClassProdi === "s1 informatika" ||
-          normClassProdi === "informatika" ||
-          normClassProdi === "s1 teknik informatika")) ||
-      (normClassProdi === "teknik informatika" &&
-        (normSelected === "s1 informatika" ||
-          normSelected === "informatika" ||
-          normSelected === "s1 teknik informatika")) ||
-      (normSelected === "sistem informasi" && normClassProdi === "s1 sistem informasi") ||
-      (normClassProdi === "sistem informasi" && normSelected === "s1 sistem informasi") ||
-      (normSelected === "teknologi informasi" && normClassProdi === "s1 teknologi informasi") ||
-      (normClassProdi === "teknologi informasi" && normSelected === "s1 teknologi informasi") ||
-      (normSelected === "manajemen informatika" && normClassProdi === "d3 manajemen informatika") ||
-      (normClassProdi === "manajemen informatika" && normSelected === "d3 manajemen informatika");
+      (normSelected === "s1 teknik informatika" &&
+        (normClassProdi === "s1 informatika" || normClassProdi === "informatika")) ||
+      (normClassProdi === "s1 teknik informatika" &&
+        (normSelected === "s1 informatika" || normSelected === "informatika")) ||
+      (normSelected === "s1 manajemen informatika" &&
+        normClassProdi === "d3 manajemen informatika") ||
+      (normClassProdi === "s1 manajemen informatika" &&
+        normSelected === "d3 manajemen informatika");
 
     const matchesSemester =
       selectedSemester === "Semua" || String(c.semester) === selectedSemester;
@@ -314,6 +323,7 @@ export function useAdminClasses() {
     showCreateModal,
     setShowCreateModal,
     editingClass,
+    setEditingClass,
     openCreateModal,
     openEditModal,
     handleSaveClass,

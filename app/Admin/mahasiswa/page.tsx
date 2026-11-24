@@ -4,6 +4,8 @@ import React from "react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
 import AuthGuard from "@/components/shared/AuthGuard";
+import { SharedResetPasswordModal } from "@/components/admin/ResetPasswordModal";
+import { CheckCircle2, X } from "lucide-react";
 import { useAdminStudents } from "@/hooks/useAdminStudents";
 import {
   StudentHeader,
@@ -36,6 +38,13 @@ export default function AdminMahasiswaPage() {
     getFieldError,
     fetchStudents,
     handleDeleteStudent,
+    resetTarget,
+    setResetTarget,
+    setResetPasswordVal,
+    isResetting,
+    handleResetPassword,
+    notification,
+    setNotification,
   } = useAdminStudents();
 
   return (
@@ -54,6 +63,29 @@ export default function AdminMahasiswaPage() {
               onOpenCreateModal={() => setIsModalOpen(true)}
             />
 
+            {/* Notification Alert */}
+            {notification && (
+              <div
+                className={`p-4 rounded-xl border flex items-center justify-between text-xs font-semibold animate-in fade-in slide-in-from-top-2 duration-200 ${
+                  notification.type === "success"
+                    ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+                    : "bg-rose-50 border-rose-200 text-rose-800"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  <span>{notification.message}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setNotification(null)}
+                  className="hover:opacity-75 transition"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
             {/* Search & Filter Bar */}
             <StudentSearchBar
               searchQuery={searchQuery}
@@ -69,6 +101,10 @@ export default function AdminMahasiswaPage() {
             <StudentTable
               students={filteredStudents}
               isLoading={isLoading}
+              onOpenResetPassword={(std) => {
+                setResetTarget(std);
+                setResetPasswordVal("");
+              }}
               onOpenDeleteConfirm={(std) => setDeleteTarget(std)}
             />
           </div>
@@ -93,6 +129,26 @@ export default function AdminMahasiswaPage() {
           isDeleting={isDeleting}
           onClose={() => setDeleteTarget(null)}
           onConfirm={handleDeleteStudent}
+        />
+
+        {/* Modal Reset Password Mahasiswa */}
+        <SharedResetPasswordModal
+          isOpen={Boolean(resetTarget)}
+          accountTypeLabel="akun mahasiswa"
+          accountInfo={
+            resetTarget
+              ? {
+                  title: resetTarget.name,
+                  subtitle: `NIM: ${resetTarget.nim} • ${resetTarget.email}`,
+                }
+              : null
+          }
+          isResetting={isResetting}
+          onClose={() => {
+            setResetTarget(null);
+            setResetPasswordVal("");
+          }}
+          onSubmit={handleResetPassword}
         />
       </div>
     </AuthGuard>

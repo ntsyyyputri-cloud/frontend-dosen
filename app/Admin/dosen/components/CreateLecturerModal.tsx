@@ -159,6 +159,7 @@ export function CreateLecturerModal({
               <input
                 type="password"
                 name="password"
+                autoComplete="new-password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 placeholder="Minimal 6 karakter"

@@ -32,7 +32,6 @@ export default function AdminDosenPage() {
     handleDeleteLecturer,
     resetTarget,
     setResetTarget,
-    resetPasswordVal,
     setResetPasswordVal,
     isResetting,
     handleResetPassword,
@@ -119,7 +118,10 @@ export default function AdminDosenPage() {
           actionState={actionState}
           formData={formData}
           setFormData={setFormData}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false);
+            setFormData((prev) => ({ ...prev, password: "" }));
+          }}
           formDispatch={formDispatch}
           getFieldError={getFieldError}
         />
@@ -135,10 +137,11 @@ export default function AdminDosenPage() {
         {/* Modal Reset Password Dosen */}
         <ResetPasswordModal
           target={resetTarget}
-          resetPasswordVal={resetPasswordVal}
-          onPasswordChange={setResetPasswordVal}
           isResetting={isResetting}
-          onClose={() => setResetTarget(null)}
+          onClose={() => {
+            setResetTarget(null);
+            setResetPasswordVal("");
+          }}
           onSubmit={handleResetPassword}
         />
       </div>

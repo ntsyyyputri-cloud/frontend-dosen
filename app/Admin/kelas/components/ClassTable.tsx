@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Layers, RefreshCw, Users, Edit, Trash2, Plus } from "lucide-react";
-import { CampusClassData } from "@/types/class";
+import { CampusClassData, normalizeClassProdi } from "@/types/class";
 
 interface ClassTableProps {
   classes: CampusClassData[];
@@ -92,7 +92,7 @@ export function ClassTable({
 
                     {/* Program Studi */}
                     <td className="py-3.5 px-4">
-                      <span className="font-medium text-slate-700 text-xs">{c.prodi}</span>
+                      <span className="font-medium text-slate-700 text-xs">{normalizeClassProdi(c.prodi) || c.prodi}</span>
                       <p className="text-[10px] text-slate-400 mt-0.5">{c.academic_year || "2024/2025 Ganjil"}</p>
                     </td>
 
@@ -106,17 +106,28 @@ export function ClassTable({
 
                     {/* Kapasitas */}
                     <td className="py-3.5 px-4 text-center">
-                      <div className="max-w-[120px] mx-auto space-y-1">
+                      <div className="max-w-[140px] mx-auto space-y-1">
                         <div className="flex items-center justify-between text-[10px] font-semibold">
                           <span className="text-indigo-600 font-bold">{enrolled} Mhs</span>
                           <span className="text-slate-400">Kuota {capacity}</span>
                         </div>
                         <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-indigo-600 rounded-full transition-all"
+                            className={`h-full rounded-full transition-all ${
+                              enrolled < 30 ? "bg-amber-500" : "bg-indigo-600"
+                            }`}
                             style={{ width: `${percent}%` }}
                           />
                         </div>
+                        {enrolled < 30 ? (
+                          <p className="text-[10px] font-semibold text-amber-600">
+                            Kurang {30 - enrolled} mhs (Min. 30)
+                          </p>
+                        ) : (
+                          <p className="text-[10px] font-semibold text-emerald-600">
+                            Min. 30 terpenuhi
+                          </p>
+                        )}
                       </div>
                     </td>
 

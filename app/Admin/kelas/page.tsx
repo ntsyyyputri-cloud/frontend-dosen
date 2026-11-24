@@ -36,6 +36,7 @@ export default function AdminKelasPage() {
     showCreateModal,
     setShowCreateModal,
     editingClass,
+    setEditingClass,
     openCreateModal,
     openEditModal,
     handleSaveClass,
@@ -130,6 +131,7 @@ export default function AdminKelasPage() {
           prodiOptions={prodiOptions}
           onClose={() => {
             setShowCreateModal(false);
+            setEditingClass(null);
           }}
           onSubmit={handleSaveClass}
         />
