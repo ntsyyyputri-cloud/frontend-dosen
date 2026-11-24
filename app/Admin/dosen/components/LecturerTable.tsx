@@ -61,15 +61,15 @@ export function LecturerTable({
                         {lec.name?.[0] || "D"}
                       </div>
                       <div>
-                        <p className="font-bold text-slate-900 text-xs">{lec.fullName || lec.name}</p>
-                        <p className="text-[10px] text-indigo-600 font-semibold mt-0.5">
+                        <p className="font-bold text-slate-900 text-xs select-text">{lec.fullName || lec.name}</p>
+                        <p className="text-[10px] text-indigo-600 font-semibold mt-0.5 select-text">
                           NIDN: {lec.nidn}
                         </p>
                       </div>
                     </div>
                   </td>
                   <td className="py-3.5 px-4">
-                    <div className="space-y-0.5">
+                    <div className="space-y-0.5 select-text">
                       <p className="text-slate-700 font-medium flex items-center gap-1.5 text-xs">
                         <Mail className="w-3.5 h-3.5 text-slate-400" />
                         <span>{lec.email}</span>

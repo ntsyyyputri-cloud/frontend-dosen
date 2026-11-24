@@ -48,8 +48,8 @@ export default function RecentLecturersCard({
                   {lec.name[0] || "D"}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="font-bold text-slate-800 text-xs truncate">{fullName}</p>
-                  <p className="text-[10px] text-slate-400 truncate">
+                  <p className="font-bold text-slate-800 text-xs truncate select-text">{fullName}</p>
+                  <p className="text-[10px] text-slate-400 truncate select-text">
                     NIDN: {lec.nidn} • {lec.email}
                   </p>
                 </div>

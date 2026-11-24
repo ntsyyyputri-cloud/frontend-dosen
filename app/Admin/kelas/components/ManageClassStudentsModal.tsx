@@ -206,9 +206,9 @@ export function ManageClassStudentsModal({
               ) : (
                 classStudents.map((s) => (
                   <tr key={s.id} className="hover:bg-slate-50/60">
-                    <td className="py-2.5 px-3 font-semibold text-slate-700">{s.nim}</td>
-                    <td className="py-2.5 px-3 font-bold text-slate-900">{s.name}</td>
-                    <td className="py-2.5 px-3 text-slate-500">{normalizeClassProdi(s.prodi) || s.prodi}</td>
+                    <td className="py-2.5 px-3 font-semibold text-slate-700 select-text">{s.nim}</td>
+                    <td className="py-2.5 px-3 font-bold text-slate-900 select-text">{s.name}</td>
+                    <td className="py-2.5 px-3 text-slate-500 select-text">{normalizeClassProdi(s.prodi) || s.prodi}</td>
                     <td className="py-2.5 px-3 text-center">
                       <button
                         type="button"
