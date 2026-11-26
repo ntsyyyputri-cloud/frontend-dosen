@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { lecturerService } from "@/services/lecturerService";
 import { LecturerDashboardStats, TeachingClass } from "@/types/dashboard";
+import { useRealtimeEvents } from "@/hooks/useRealtimeEvents";
 
 const INITIAL_STATS: LecturerDashboardStats = {
   totalClasses: 0,
@@ -17,7 +18,7 @@ export function useLecturerDashboard() {
   const [stats, setStats] = useState<LecturerDashboardStats>(INITIAL_STATS);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchDashboard = async () => {
+  const fetchDashboard = useCallback(async () => {
     setIsLoading(true);
     try {
       const res = await lecturerService.getDashboard();
@@ -38,11 +39,18 @@ export function useLecturerDashboard() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchDashboard();
-  }, []);
+  }, [fetchDashboard]);
+
+  useRealtimeEvents(
+    ["attendance_updated", "assignment_submitted", "grade_review_created"],
+    () => {
+      fetchDashboard();
+    }
+  );
 
   return {
     classes,
