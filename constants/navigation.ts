@@ -9,6 +9,7 @@ import {
   Printer,
   User,
   ShieldCheck,
+  ClipboardCheck,
 } from "lucide-react";
 import { MenuGroup } from "@/types/shared";
 
@@ -53,6 +54,11 @@ export const DOSEN_MENU_GROUPS: MenuGroup[] = [
         label: "Dashboard",
         href: "/dosen/dashboard",
         icon: LayoutDashboard,
+      },
+      {
+        label: "Presensi Kelas",
+        href: "/dosen/presensi",
+        icon: ClipboardCheck,
       },
     ],
   },
