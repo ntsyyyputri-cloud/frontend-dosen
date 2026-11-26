@@ -77,6 +77,13 @@ export function useAdminLecturers() {
 
   useEffect(() => {
     fetchLecturers();
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const searchParam = params.get("search");
+      if (searchParam) {
+        setSearchQuery(searchParam);
+      }
+    }
   }, []);
 
   // Efek jika aksi Server Action berhasil

@@ -54,6 +54,17 @@ export function useAdminStudents() {
 
   useEffect(() => {
     fetchStudents();
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const searchParam = params.get("search");
+      const prodiParam = params.get("prodi");
+      if (searchParam) {
+        setSearchQuery(searchParam);
+      }
+      if (prodiParam) {
+        setSelectedProdi(prodiParam);
+      }
+    }
   }, []);
 
   // Efek ketika mutasi server action berhasil

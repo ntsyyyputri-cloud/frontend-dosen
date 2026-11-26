@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Layers, RefreshCw, Users, Edit, Trash2, Plus } from "lucide-react";
+import Link from "next/link";
+import { Layers, RefreshCw, Users, Edit, Trash2, Plus, Sparkles } from "lucide-react";
 import { CampusClassData, normalizeClassProdi } from "@/types/class";
 
 interface ClassTableProps {
@@ -11,6 +12,7 @@ interface ClassTableProps {
   onOpenManageStudents: (c: CampusClassData) => void;
   onOpenEditModal: (c: CampusClassData) => void;
   onOpenDeleteConfirm: (id: number) => void;
+  onFillMinimumStudents?: (classId: number) => void;
 }
 
 export function ClassTable({
@@ -20,6 +22,7 @@ export function ClassTable({
   onOpenManageStudents,
   onOpenEditModal,
   onOpenDeleteConfirm,
+  onFillMinimumStudents,
 }: ClassTableProps) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
@@ -84,10 +87,16 @@ export function ClassTable({
 
                     {/* Dosen Pengampu */}
                     <td className="py-3.5 px-4">
-                      <div>
-                        <p className="font-semibold text-slate-800 text-xs">{c.lecturerFullName}</p>
+                      <Link
+                        href={`/admin/dosen?search=${encodeURIComponent(c.lecturer_nidn || c.lecturerFullName)}`}
+                        className="group block"
+                        title="Lihat profil dosen di Manajemen Dosen"
+                      >
+                        <p className="font-semibold text-slate-800 group-hover:text-indigo-600 text-xs transition-colors">
+                          {c.lecturerFullName}
+                        </p>
                         <p className="text-[10px] text-slate-400">NIDN: {c.lecturer_nidn}</p>
-                      </div>
+                      </Link>
                     </td>
 
                     {/* Program Studi */}
@@ -120,9 +129,22 @@ export function ClassTable({
                           />
                         </div>
                         {enrolled < 30 ? (
-                          <p className="text-[10px] font-semibold text-amber-600">
-                            Kurang {30 - enrolled} mhs (Min. 30)
-                          </p>
+                          <div className="space-y-1">
+                            <p className="text-[10px] font-semibold text-amber-600">
+                              Kurang {30 - enrolled} mhs (Min. 30)
+                            </p>
+                            {onFillMinimumStudents && (
+                              <button
+                                type="button"
+                                onClick={() => onFillMinimumStudents(c.id)}
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 font-semibold text-[10px] transition"
+                                title="Isi otomatis hingga minimal 30 mahasiswa"
+                              >
+                                <Sparkles className="w-2.5 h-2.5" />
+                                <span>Isi Min. 30</span>
+                              </button>
+                            )}
+                          </div>
                         ) : (
                           <p className="text-[10px] font-semibold text-emerald-600">
                             Min. 30 terpenuhi

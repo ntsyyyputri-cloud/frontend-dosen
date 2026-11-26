@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { RefreshCw, BookOpen, KeyRound, Trash2 } from "lucide-react";
 import { StudentData } from "@/types/student";
 
@@ -75,10 +76,14 @@ export function StudentTable({
                     </span>
                   </td>
                   <td className="py-3.5 px-4 text-center">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 font-semibold text-[11px]">
+                    <Link
+                      href={`/admin/kelas?prodi=${encodeURIComponent(std.prodi)}`}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 font-semibold text-[11px] transition-colors"
+                      title={`Lihat kelas program studi ${std.prodi}`}
+                    >
                       <BookOpen className="w-3 h-3 text-slate-400" />
                       <span>{std.enrolled_classes_count ?? (std as any).class_count ?? 0} Mata Kuliah</span>
-                    </span>
+                    </Link>
                   </td>
                   <td className="py-3.5 px-4 text-right">
                     <div className="flex items-center justify-end gap-1.5">

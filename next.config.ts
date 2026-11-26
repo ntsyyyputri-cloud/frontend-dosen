@@ -29,7 +29,6 @@ const nextConfig: NextConfig = {
   // Proxy API requests to backend during development
   async rewrites() {
     return [
- 
       { source: "/api/:path*", destination: "http://localhost:5001/api/:path*" },
       // UI route rewrites (map lowercase & shortcut URLs to App Router folders Admin/ and Dosen/)
       { source: "/dosen", destination: "/Dosen/dashboard" },
@@ -53,9 +52,7 @@ const nextConfig: NextConfig = {
       { source: "/kelola-profil", destination: "/Dosen/profil" },
       { source: "/keamanan", destination: "/Dosen/keamanan" },
       { source: "/panduan", destination: "/Dosen/dashboard" },
-
     ];
-
   },
 };
 

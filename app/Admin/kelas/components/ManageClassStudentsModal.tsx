@@ -1,7 +1,8 @@
 "use client";
 
 import React, { type FormEvent } from "react";
-import { X, UserPlus, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { X, UserPlus, Trash2, Sparkles, ExternalLink } from "lucide-react";
 import {
   CampusClassData,
   ClassStudentItem,
@@ -22,6 +23,7 @@ interface ManageClassStudentsModalProps {
   setNewName: (val: string) => void;
   onEnroll: (e: FormEvent) => void;
   onUnenroll: (studentId: number) => void;
+  onFillMinimumStudents?: (classId: number) => void;
   onClose: () => void;
 }
 
@@ -38,6 +40,7 @@ export function ManageClassStudentsModal({
   setNewName,
   onEnroll,
   onUnenroll,
+  onFillMinimumStudents,
   onClose,
 }: ManageClassStudentsModalProps) {
   if (!managingClass) return null;
@@ -64,7 +67,13 @@ export function ManageClassStudentsModal({
             </h3>
             <p className="text-slate-500 text-xs mt-0.5">
               Kode: <strong className="text-indigo-600">{managingClass.code}</strong> • Prodi:{" "}
-              <strong className="text-slate-700">{classProdiLabel}</strong> • Dosen: {managingClass.lecturerFullName}
+              <strong className="text-slate-700">{classProdiLabel}</strong> • Dosen:{" "}
+              <Link
+                href={`/admin/dosen?search=${encodeURIComponent(managingClass.lecturer_nidn || managingClass.lecturerFullName)}`}
+                className="text-indigo-600 hover:underline font-semibold"
+              >
+                {managingClass.lecturerFullName}
+              </Link>
             </p>
           </div>
           <button
@@ -83,9 +92,21 @@ export function ManageClassStudentsModal({
             {maxCapacity > 0 ? <span className="text-slate-400"> / {maxCapacity} Mahasiswa</span> : " Mahasiswa"}
           </div>
           {neededForMin > 0 ? (
-            <span className="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 font-semibold text-[11px]">
-              Masih dibutuhkan {neededForMin} mahasiswa lagi (Min. {minRequired})
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 font-semibold text-[11px]">
+                Masih dibutuhkan {neededForMin} mahasiswa lagi (Min. {minRequired})
+              </span>
+              {onFillMinimumStudents && (
+                <button
+                  type="button"
+                  onClick={() => onFillMinimumStudents(managingClass.id)}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-[11px] transition"
+                >
+                  <Sparkles className="w-3 h-3" />
+                  <span>Auto-Isi Min. {minRequired}</span>
+                </button>
+              )}
+            </div>
           ) : (
             <span className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold text-[11px]">
               Target minimal {minRequired} mahasiswa terpenuhi
@@ -207,7 +228,16 @@ export function ManageClassStudentsModal({
                 classStudents.map((s) => (
                   <tr key={s.id} className="hover:bg-slate-50/60">
                     <td className="py-2.5 px-3 font-semibold text-slate-700 select-text">{s.nim}</td>
-                    <td className="py-2.5 px-3 font-bold text-slate-900 select-text">{s.name}</td>
+                    <td className="py-2.5 px-3 font-bold text-slate-900 select-text">
+                      <Link
+                        href={`/admin/mahasiswa?search=${encodeURIComponent(s.nim)}`}
+                        className="hover:text-indigo-600 hover:underline inline-flex items-center gap-1"
+                        title="Lihat detail di Master Mahasiswa"
+                      >
+                        <span>{s.name}</span>
+                        <ExternalLink className="w-3 h-3 text-slate-300" />
+                      </Link>
+                    </td>
                     <td className="py-2.5 px-3 text-slate-500 select-text">{normalizeClassProdi(s.prodi) || s.prodi}</td>
                     <td className="py-2.5 px-3 text-center">
                       <button
@@ -227,7 +257,16 @@ export function ManageClassStudentsModal({
         </div>
 
         <div className="pt-2 border-t border-slate-100 flex justify-between items-center text-slate-400 text-xs">
-          <span>Total: {classStudents.length} Mahasiswa Terdaftar</span>
+          <div className="flex items-center gap-3">
+            <span>Total: {classStudents.length} Mahasiswa Terdaftar</span>
+            <Link
+              href={`/admin/mahasiswa?prodi=${encodeURIComponent(classProdiLabel)}`}
+              className="text-indigo-600 hover:underline font-semibold inline-flex items-center gap-1"
+            >
+              <span>Kelola Master Mahasiswa</span>
+              <ExternalLink className="w-3 h-3" />
+            </Link>
+          </div>
           <button
             type="button"
             onClick={onClose}
