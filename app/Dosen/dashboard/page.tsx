@@ -11,7 +11,7 @@ import {
   TodayScheduleCard,
   ObeProgressCard,
   RecentActivityCard,
-  FacultyAnnouncementCard,
+  LecturerEvaluationCard,
 } from "./components";
 
 export default function LecturerDashboard() {
@@ -52,8 +52,8 @@ export default function LecturerDashboard() {
                 {/* Aktivitas Terbaru */}
                 <RecentActivityCard />
 
-                {/* Pengumuman Fakultas */}
-                <FacultyAnnouncementCard />
+                {/* Evaluasi Dosen */}
+                <LecturerEvaluationCard classes={classes} />
               </div>
             </div>
           </main>

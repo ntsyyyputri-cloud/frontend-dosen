@@ -8,7 +8,7 @@ interface GradeTableProps {
   students: GradeStudent[];
   selectedIds: number[];
   weights: WeightConfig;
-  onSelectAll: (e: ChangeEvent<HTMLInputElement>) => void;
+  onSelectAll?: (e: ChangeEvent<HTMLInputElement>) => void;
   onSelectOne: (id: number) => void;
   onScoreChange: (id: number, field: ScoreField, val: string) => void;
   calculateFinalGrade: (t: number | null, u: number | null, a: number | null) => GradeResult;
@@ -18,12 +18,10 @@ export function GradeTable({
   students,
   selectedIds,
   weights,
-  onSelectAll,
   onSelectOne,
   onScoreChange,
   calculateFinalGrade,
 }: GradeTableProps) {
-  const isAllSelected = students.length > 0 && selectedIds.length === students.length;
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, rowIndex: number, field: ScoreField) => {
     const fields: ScoreField[] = ["tugas", "uts", "uas"];
@@ -49,19 +47,10 @@ export function GradeTable({
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs">
+        <table className="w-full text-left text-xs select-none cursor-default">
           <thead>
             <tr className="bg-slate-50/90 border-b border-slate-200 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
-              <th className="py-3 px-4 w-12 text-center">
-                <input
-                  type="checkbox"
-                  checked={isAllSelected}
-                  onChange={onSelectAll}
-                  aria-label="Pilih semua mahasiswa"
-                  className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                />
-              </th>
-              <th className="py-3 px-4 min-w-[200px]">Mahasiswa</th>
+              <th className="py-3 px-4 min-w-[220px]">Mahasiswa</th>
               <th className="py-3 px-3 text-center w-28">
                 <div className="flex flex-col items-center">
                   <span>Tugas</span>
@@ -94,7 +83,7 @@ export function GradeTable({
           <tbody className="divide-y divide-slate-100">
             {students.length === 0 ? (
               <tr>
-                <td colSpan={8} className="py-14 text-center">
+                <td colSpan={7} className="py-14 text-center">
                   <div className="flex flex-col items-center justify-center gap-2">
                     <SearchX className="w-8 h-8 text-slate-300" />
                     <p className="text-sm font-semibold text-slate-600">Tidak ada data mahasiswa</p>
@@ -112,30 +101,25 @@ export function GradeTable({
                 return (
                   <tr
                     key={s.id}
-                    className={`hover:bg-slate-50/70 transition-colors ${
-                      isSelected ? "bg-blue-50/40" : ""
-                    }`}
+                    className={`hover:bg-slate-50/70 transition-colors ${isSelected ? "bg-blue-50/40" : ""
+                      }`}
                   >
-                    {/* Checkbox */}
-                    <td className="py-3 px-4 text-center">
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => onSelectOne(s.id)}
-                        aria-label={`Pilih ${s.name}`}
-                        className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                      />
-                    </td>
-
-                    {/* Mahasiswa Info */}
+                    {/* Mahasiswa Info (dengan checkbox di dalam kolom nama) */}
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => onSelectOne(s.id)}
+                          aria-label={`Pilih ${s.name}`}
+                          className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer shrink-0"
+                        />
                         <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 text-slate-700 font-bold flex items-center justify-center text-[10px] shrink-0">
                           {s.avatar}
                         </div>
                         <div>
-                          <p className="font-bold text-slate-900 text-xs leading-tight select-text">{s.name}</p>
-                          <p className="text-[11px] text-slate-400 font-mono select-text">NIM: {s.nim}</p>
+                          <p className="font-bold text-slate-900 text-xs leading-tight">{s.name}</p>
+                          <p className="text-[11px] text-slate-400 font-mono">NIM: {s.nim}</p>
                         </div>
                       </div>
                     </td>
@@ -198,17 +182,16 @@ export function GradeTable({
                     {/* Grade Huruf */}
                     <td className="py-3 px-3 text-center">
                       <span
-                        className={`inline-block px-2.5 py-0.5 rounded-lg text-[11px] font-bold ${
-                          grade === "A" || grade === "A-"
-                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                            : grade === "B" || grade === "B+"
+                        className={`inline-block px-2.5 py-0.5 rounded-lg text-[11px] font-bold ${grade === "A" || grade === "A-"
+                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                          : grade === "B" || grade === "B+"
                             ? "bg-blue-50 text-blue-700 border border-blue-200"
                             : grade === "C" || grade === "C+"
-                            ? "bg-amber-50 text-amber-700 border border-amber-200"
-                            : grade === "-"
-                            ? "text-slate-400 font-medium"
-                            : "bg-rose-50 text-rose-700 border border-rose-200"
-                        }`}
+                              ? "bg-amber-50 text-amber-700 border border-amber-200"
+                              : grade === "-"
+                                ? "text-slate-400 font-medium"
+                                : "bg-rose-50 text-rose-700 border border-rose-200"
+                          }`}
                       >
                         {grade}
                       </span>
@@ -217,13 +200,12 @@ export function GradeTable({
                     {/* Status */}
                     <td className="py-3 px-4 text-center">
                       <span
-                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold ${
-                          s.status === "Tersimpan"
-                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200/80"
-                            : s.status === "Perlu remedial"
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold ${s.status === "Tersimpan"
+                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200/80"
+                          : s.status === "Perlu remedial"
                             ? "bg-rose-50 text-rose-700 border border-rose-200/80"
                             : "bg-amber-50 text-amber-700 border border-amber-200/80"
-                        }`}
+                          }`}
                       >
                         {s.status === "Tersimpan" && <CheckCircle2 className="w-3 h-3 text-emerald-600" />}
                         {s.status === "Perlu remedial" && <AlertCircle className="w-3 h-3 text-rose-600" />}

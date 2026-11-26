@@ -122,11 +122,10 @@ export function OfficialReportDocument({
                   <td className="py-2 px-3 text-center border-r border-slate-200 font-bold text-slate-900">{g.final_score ?? "-"}</td>
                   <td className="py-2 px-3 text-center border-r border-slate-200 font-bold text-slate-800">{g.letter_grade ?? "-"}</td>
                   <td className="py-2 px-3 text-center font-medium">
-                    <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold ${
-                      (g.letter_grade === "A" || g.letter_grade === "A-" || g.letter_grade === "B+" || g.letter_grade === "B")
-                        ? "text-emerald-700 bg-emerald-50"
-                        : "text-amber-700 bg-amber-50"
-                    }`}>
+                    <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold ${(g.letter_grade === "A" || g.letter_grade === "A-" || g.letter_grade === "B+" || g.letter_grade === "B")
+                      ? "text-emerald-700 bg-emerald-50"
+                      : "text-amber-700 bg-amber-50"
+                      }`}>
                       {g.letter_grade && ["A", "A-", "B+", "B", "C+", "C"].includes(g.letter_grade) ? "Lulus" : "Remedial"}
                     </span>
                   </td>

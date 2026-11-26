@@ -128,7 +128,7 @@ export function useAdminLecturers() {
         localStorage.setItem("gradia_lecturer", JSON.stringify(res.lecturer || res.user));
         document.cookie = `gradia_token=${res.token}; path=/; max-age=604800; SameSite=Lax;`;
         document.cookie = `gradia_role=dosen; path=/; max-age=604800; SameSite=Lax;`;
-        window.location.href = "/Dosen/dashboard";
+        window.location.href = "/dosen/dashboard";
       }
     } catch (err: any) {
       alert("Gagal melakukan login cepat: " + err.message);

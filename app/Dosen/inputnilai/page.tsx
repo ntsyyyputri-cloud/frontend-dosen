@@ -1,18 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import AuthGuard from "@/components/AuthGuard";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
-import { CheckCircle2, X } from "lucide-react";
+import { CheckCircle2, Save, X } from "lucide-react";
 import { useInputNilai } from "@/hooks/useInputNilai";
-import { gradeService } from "@/services/gradeService";
-import { GradeAppeal, ScoreField } from "@/types/grade";
+import { ScoreField } from "@/types/grade";
 import {
   GradeClassHeader,
   GradeFilterTabs,
   GradeTable,
-  GradeAppealsModal,
   WeightSettingsModal,
 } from "./components";
 
@@ -46,9 +44,6 @@ export default function InputNilaiPage() {
     isSaving,
   } = useInputNilai();
 
-  const [isAppealsOpen, setIsAppealsOpen] = useState(false);
-  const [appeals, setAppeals] = useState<GradeAppeal[]>([]);
-
   // Weight Settings Modal State
   const [isWeightSettingsOpen, setIsWeightSettingsOpen] = useState(false);
 
@@ -56,39 +51,6 @@ export default function InputNilaiPage() {
   const [isQuickFillOpen, setIsQuickFillOpen] = useState(false);
   const [quickFillField, setQuickFillField] = useState<ScoreField>("tugas");
   const [quickFillScore, setQuickFillScore] = useState<number>(80);
-
-  useEffect(() => {
-    if (!activeClassId) return;
-    gradeService
-      .getAppealsByClass(activeClassId)
-      .then((res) => {
-        if (res && res.appeals) setAppeals(res.appeals);
-      })
-      .catch((err) => {
-        console.warn("Gagal memuat sanggahan nilai:", err);
-      });
-  }, [activeClassId]);
-
-  const handleUpdateAppealStatus = async (
-    appealId: number,
-    status: "approved" | "rejected",
-    response?: string
-  ) => {
-    try {
-      await gradeService.updateAppeal(appealId, status, response);
-      setAppeals((prev) =>
-        prev.map((a) =>
-          a.id === appealId
-            ? { ...a, status, lecturer_response: response || null }
-            : a
-        )
-      );
-    } catch (err: any) {
-      console.error("Gagal mengupdate status sanggahan:", err);
-    }
-  };
-
-  const pendingAppealsCount = appeals.filter((a) => a.status === "pending").length;
 
   const handleApplyQuickFill = (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,10 +84,6 @@ export default function InputNilaiPage() {
               classes={classes}
               activeClassId={activeClassId}
               onClassChange={loadGradesForClass}
-              onSave={handleSaveGrades}
-              isSaving={isSaving}
-              appealsCount={pendingAppealsCount}
-              onOpenAppeals={() => setIsAppealsOpen(true)}
               onOpenWeightSettings={() => setIsWeightSettingsOpen(true)}
               isWeightValid={isWeightValid}
               totalWeight={totalWeight}
@@ -139,7 +97,6 @@ export default function InputNilaiPage() {
               onSearchChange={setSearchQuery}
               counts={counts}
               selectedCount={selectedIds.length}
-              onQuickFillSelected={() => setIsQuickFillOpen(true)}
               onClearSelected={handleClearSelected}
             />
 
@@ -153,16 +110,21 @@ export default function InputNilaiPage() {
               onScoreChange={handleScoreChange}
               calculateFinalGrade={calculateFinalGrade}
             />
+
+            {/* Bottom Save Action */}
+            <div className="flex justify-end">
+              <button
+                type="button"
+                disabled={isSaving}
+                onClick={handleSaveGrades}
+                className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-xs text-xs disabled:opacity-60 cursor-pointer active:scale-[0.98]"
+              >
+                <Save className="w-3.5 h-3.5" />
+                <span>{isSaving ? "Menyimpan..." : "Simpan Rekap"}</span>
+              </button>
+            </div>
           </main>
         </div>
-
-        {/* Modal Koreksi Nilai Mahasiswa */}
-        <GradeAppealsModal
-          isOpen={isAppealsOpen}
-          onClose={() => setIsAppealsOpen(false)}
-          appeals={appeals}
-          onUpdateStatus={handleUpdateAppealStatus}
-        />
 
         {/* Modal Pengaturan Bobot Nilai */}
         <WeightSettingsModal

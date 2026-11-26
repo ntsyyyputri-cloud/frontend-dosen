@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Search, X, CheckCheck, Trash2 } from "lucide-react";
+import { Search, X, Trash2 } from "lucide-react";
 import { FilterTab } from "@/types/grade";
 
 interface GradeFilterTabsProps {
@@ -16,7 +16,6 @@ interface GradeFilterTabsProps {
     belumLengkap: number;
   };
   selectedCount?: number;
-  onQuickFillSelected?: () => void;
   onClearSelected?: () => void;
 }
 
@@ -27,7 +26,6 @@ export function GradeFilterTabs({
   onSearchChange,
   counts,
   selectedCount = 0,
-  onQuickFillSelected,
   onClearSelected,
 }: GradeFilterTabsProps) {
   const tabs = [
@@ -75,22 +73,11 @@ export function GradeFilterTabs({
         {selectedCount > 0 && (
           <div className="flex items-center gap-1.5 bg-blue-50 border border-blue-200 text-blue-900 px-2.5 py-1 rounded-xl text-xs animate-in fade-in">
             <span className="font-bold text-[11px]">{selectedCount} terpilih</span>
-            {onQuickFillSelected && (
-              <button
-                type="button"
-                onClick={onQuickFillSelected}
-                className="flex items-center gap-1 px-2 py-0.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-[11px] transition-all"
-                title="Isi nilai cepat"
-              >
-                <CheckCheck className="w-3 h-3" />
-                <span>Isi</span>
-              </button>
-            )}
             {onClearSelected && (
               <button
                 type="button"
                 onClick={onClearSelected}
-                className="flex items-center gap-1 px-2 py-0.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg font-medium text-[11px] transition-all"
+                className="flex items-center gap-1 px-2 py-0.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg font-medium text-[11px] transition-all cursor-pointer"
                 title="Kosongkan nilai terpilih"
               >
                 <Trash2 className="w-3 h-3" />

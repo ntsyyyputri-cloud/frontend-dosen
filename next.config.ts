@@ -30,28 +30,8 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
  
-      { source: "/api/:path*", destination: "http://localhost:5002/api/:path*" },
-      // UI route rewrites
-      { source: "/Dosen/:path*", destination: "/dosen/:path*" },
-      { source: "/Admin/:path*", destination: "/admin/:path*" },
-      { source: "/dashboard", destination: "/dosen/dashboard" },
-      { source: "/dashboard/export-laporan", destination: "/dosen/cetakPDF" },
-      { source: "/dashboard/input-nilai", destination: "/dosen/inputnilai" },
-      { source: "/dashboard/ai-feedback", destination: "/dosen/analitikAI" },
-      { source: "/dashboard/profil", destination: "/dosen/profil" },
-      { source: "/kelas", destination: "/admin/kelas" },
-      { source: "/tambah-kelas", destination: "/admin/kelas" },
-      { source: "/input-nilai", destination: "/dosen/inputnilai" },
-      { source: "/import-nilai", destination: "/dosen/importnilai" },
-      { source: "/import-excel", destination: "/dosen/importnilai" },
-      { source: "/analitik-ai", destination: "/dosen/analitikAI" },
-      { source: "/generate-ai", destination: "/dosen/generateAI" },
-      { source: "/cetak-laporan", destination: "/dosen/cetakPDF" },
-      { source: "/export-laporan", destination: "/dosen/cetakPDF" },
-      { source: "/kelola-profil", destination: "/dosen/profil" },
-      { source: "/keamanan", destination: "/dosen/keamanan" },
-      { source: "/panduan", destination: "/dosen/dashboard" },
-
+      { source: "/api/:path*", destination: "http://localhost:5001/api/:path*" },
+      // UI route rewrites (map lowercase & shortcut URLs to App Router folders Admin/ and Dosen/)
       { source: "/dosen", destination: "/Dosen/dashboard" },
       { source: "/dosen/:path*", destination: "/Dosen/:path*" },
       { source: "/admin", destination: "/Admin/dashboard" },

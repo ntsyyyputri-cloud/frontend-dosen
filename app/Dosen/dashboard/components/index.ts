@@ -4,4 +4,5 @@ export * from "./TodayScheduleCard";
 export * from "./ObeProgressCard";
 export * from "./RecentActivityCard";
 export * from "./FacultyAnnouncementCard";
+export * from "./LecturerEvaluationCard";
 
