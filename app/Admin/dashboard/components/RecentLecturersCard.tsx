@@ -40,20 +40,23 @@ export default function RecentLecturersCard({
             }${lec.title_suffix ? ", " + lec.title_suffix : ""}`.trim();
 
             return (
-              <div
+              <Link
                 key={lec.id}
-                className="p-3.5 rounded-xl border border-slate-200/70 bg-slate-50/50 flex items-center gap-3"
+                href={`/admin/dosen?search=${encodeURIComponent(lec.nidn)}`}
+                className="p-3.5 rounded-xl border border-slate-200/70 bg-slate-50/50 hover:bg-indigo-50/40 hover:border-indigo-200 flex items-center gap-3 transition-all group"
               >
                 <div className="w-9 h-9 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-xs">
                   {lec.name[0] || "D"}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="font-bold text-slate-800 text-xs truncate select-text">{fullName}</p>
+                  <p className="font-bold text-slate-800 group-hover:text-indigo-600 text-xs truncate select-text transition-colors">
+                    {fullName}
+                  </p>
                   <p className="text-[10px] text-slate-400 truncate select-text">
                     NIDN: {lec.nidn} • {lec.email}
                   </p>
                 </div>
-              </div>
+              </Link>
             );
           })
         )}

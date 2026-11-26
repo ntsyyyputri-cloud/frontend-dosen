@@ -20,7 +20,7 @@ export default function RecentClassesCard({ recentClasses }: RecentClassesCardPr
           <p className="text-slate-400 text-[11px]">5 kelas terakhir yang dibuat di sistem</p>
         </div>
         <Link
-          href="/admin/dosen?tab=kelas"
+          href="/admin/kelas"
           className="text-indigo-600 hover:text-indigo-700 font-semibold text-xs flex items-center gap-1"
         >
           <span>Lihat Semua</span>
@@ -49,19 +49,46 @@ export default function RecentClassesCard({ recentClasses }: RecentClassesCardPr
               recentClasses.map((c) => (
                 <tr key={c.id} className="hover:bg-slate-50/60 transition-colors">
                   <td className="py-3 pr-2">
-                    <span className="font-bold text-slate-800 block text-xs">{c.title}</span>
-                    <span className="text-[10px] text-indigo-600 font-semibold">
-                      {c.code} • {c.sks} SKS
-                    </span>
+                    <Link
+                      href={`/admin/kelas?search=${encodeURIComponent(c.code)}&manage=${c.id}`}
+                      className="group block"
+                    >
+                      <span className="font-bold text-slate-800 group-hover:text-indigo-600 block text-xs transition-colors">
+                        {c.title}
+                      </span>
+                      <span className="text-[10px] text-indigo-600 font-semibold">
+                        {c.code} • {c.sks} SKS
+                      </span>
+                    </Link>
                   </td>
                   <td className="py-3 px-2 text-slate-700 font-medium text-xs">
-                    {c.lecturer_name}
+                    <Link
+                      href={`/admin/dosen?search=${encodeURIComponent(c.lecturer_name)}`}
+                      className="hover:text-indigo-600 hover:underline transition-colors"
+                    >
+                      {c.lecturer_name}
+                    </Link>
                   </td>
-                  <td className="py-3 px-2 text-slate-500 text-xs">{c.prodi}</td>
+                  <td className="py-3 px-2 text-slate-500 text-xs">
+                    <Link
+                      href={`/admin/kelas?prodi=${encodeURIComponent(c.prodi)}`}
+                      className="hover:text-indigo-600 transition-colors"
+                    >
+                      {c.prodi}
+                    </Link>
+                  </td>
                   <td className="py-3 pl-2 text-right">
-                    <span className="inline-flex px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-semibold text-[10px]">
+                    <Link
+                      href={`/admin/kelas?search=${encodeURIComponent(c.code)}&manage=${c.id}`}
+                      className={`inline-flex px-2 py-0.5 rounded-full font-semibold text-[10px] transition-colors ${
+                        c.enrolled_count < 30
+                          ? "bg-amber-50 text-amber-700 hover:bg-amber-100"
+                          : "bg-slate-100 text-slate-700 hover:bg-indigo-50 hover:text-indigo-700"
+                      }`}
+                      title="Kelola mahasiswa kelas ini"
+                    >
                       {c.enrolled_count} Mhs
-                    </span>
+                    </Link>
                   </td>
                 </tr>
               ))

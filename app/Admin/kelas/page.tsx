@@ -59,6 +59,7 @@ export default function AdminKelasPage() {
     openManageStudents,
     handleEnrollStudent,
     handleUnenrollStudent,
+    handleFillMinimumStudents,
   } = useAdminClasses();
 
   return (
@@ -116,6 +117,7 @@ export default function AdminKelasPage() {
               onOpenManageStudents={openManageStudents}
               onOpenEditModal={openEditModal}
               onOpenDeleteConfirm={(id) => setDeletingClassId(id)}
+              onFillMinimumStudents={handleFillMinimumStudents}
             />
           </div>
         </main>
@@ -157,6 +159,7 @@ export default function AdminKelasPage() {
           setNewName={setNewName}
           onEnroll={handleEnrollStudent}
           onUnenroll={handleUnenrollStudent}
+          onFillMinimumStudents={handleFillMinimumStudents}
           onClose={() => setManagingClass(null)}
         />
       </div>

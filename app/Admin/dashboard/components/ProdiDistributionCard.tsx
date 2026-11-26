@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { Building } from "lucide-react";
 import { ProdiStat } from "@/types/admin";
 
@@ -35,9 +36,15 @@ export default function ProdiDistributionCard({
             const total = totalStudents || 1;
             const percent = Math.round((item.count / total) * 100);
             return (
-              <div key={idx} className="space-y-1.5">
+              <Link
+                key={idx}
+                href={`/admin/mahasiswa?prodi=${encodeURIComponent(item.prodi)}`}
+                className="block space-y-1.5 p-2 -mx-2 rounded-xl hover:bg-slate-50 transition-colors group"
+              >
                 <div className="flex justify-between items-center text-xs">
-                  <span className="font-semibold text-slate-700">{item.prodi}</span>
+                  <span className="font-semibold text-slate-700 group-hover:text-indigo-600 transition-colors">
+                    {item.prodi}
+                  </span>
                   <span className="text-slate-500 font-bold">
                     {item.count} Mhs{" "}
                     <span className="text-slate-400 font-normal">({percent}%)</span>
@@ -55,7 +62,7 @@ export default function ProdiDistributionCard({
                     style={{ width: `${Math.max(percent, 8)}%` }}
                   />
                 </div>
-              </div>
+              </Link>
             );
           })
         )}

@@ -96,6 +96,8 @@ export function useAdminClasses() {
     } catch (e) {}
   };
 
+  const [pendingManageId, setPendingManageId] = useState<number | null>(null);
+
   useEffect(() => {
     fetchCampusClasses();
     fetchLecturersAndStudents();
@@ -103,11 +105,29 @@ export function useAdminClasses() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const searchParam = params.get("search");
+      const prodiParam = params.get("prodi");
+      const manageParam = params.get("manage");
       if (searchParam) {
         setSearchQuery(searchParam);
       }
+      if (prodiParam) {
+        setSelectedProdi(normalizeClassProdi(prodiParam) || prodiParam);
+      }
+      if (manageParam && !isNaN(Number(manageParam))) {
+        setPendingManageId(Number(manageParam));
+      }
     }
   }, []);
+
+  useEffect(() => {
+    if (pendingManageId && classes.length > 0) {
+      const target = classes.find((c) => c.id === pendingManageId);
+      if (target) {
+        openManageStudents(target);
+      }
+      setPendingManageId(null);
+    }
+  }, [pendingManageId, classes]);
 
   const openCreateModal = () => {
     setEditingClass(null);
@@ -261,6 +281,26 @@ export function useAdminClasses() {
     }
   };
 
+  const handleFillMinimumStudents = async (classId: number) => {
+    setIsSubmitting(true);
+    try {
+      const res = await apiFetch(`/admin/classes/${classId}/fill-minimum`, {
+        method: "POST",
+      });
+      notify(res.message || "Kelas berhasil diisi minimal 30 mahasiswa.");
+      if (managingClass && managingClass.id === classId) {
+        const stuRes = await apiFetch(`/admin/classes/${classId}/students`);
+        if (stuRes.students) setClassStudents(stuRes.students);
+      }
+      fetchCampusClasses();
+      fetchLecturersAndStudents();
+    } catch (err: any) {
+      notify("Gagal mengisi minimal 30 mahasiswa: " + err.message, "error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   // Opsi Program Studi Dinamis & Terstandarisasi (mencakup semua prodi yang terdaftar di kelas & mahasiswa)
   const prodiOptions = Array.from(
     new Set([
@@ -346,6 +386,7 @@ export function useAdminClasses() {
     openManageStudents,
     handleEnrollStudent,
     handleUnenrollStudent,
+    handleFillMinimumStudents,
   };
 }
 
