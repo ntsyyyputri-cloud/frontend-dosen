@@ -8,6 +8,7 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import { ArrowLeft, CheckCircle2, MapPin, Users, AlertTriangle } from "lucide-react";
 import { attendanceService } from "@/services/attendanceService";
+import { useRealtimeEvents } from "@/hooks/useRealtimeEvents";
 import {
   AttendanceStatus,
   ClassAttendanceDetailResponse,
@@ -74,6 +75,12 @@ export default function DetailPresensiKelasPage() {
   useEffect(() => {
     fetchAttendance();
   }, [fetchAttendance]);
+
+  useRealtimeEvents(["attendance_updated"], ( _eventName, data ) => {
+    if (!data?.classId || Number(data.classId) === kelasId) {
+      fetchAttendance(pertemuan, true);
+    }
+  });
 
   // Auto-refresh setiap 12 detik ketika sesi mobile terbuka agar real-time
   useEffect(() => {
